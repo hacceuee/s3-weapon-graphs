@@ -15,9 +15,12 @@ import KKAD_Graph
 import WL_Graph
 import JSON_Muncher
 
+first_run = True # Parameter so file doesn't have to be reloaded if the user loops to get another image. 
+
 while True: 
     # Load JSON data
-    file_path = JSON_Muncher.check_for_file()
+        
+    file_path = JSON_Muncher.check_for_file(first_run)
     with open(file_path, encoding="utf8") as file:
         data = json.load(file)
         
@@ -71,21 +74,27 @@ while True:
     # Default to not including weapon star levels if the input is not 'y' or 'n'
     include_star_levels = include_star_levels == 'y'
     
-    #Possiblity for pre-existing freshness levels
+    # Possibility for pre-existing freshness levels
     if include_star_levels:
+        # Freshness level mapping
+        freshness_mapping = {"1*": 10000, "2*": 25000, "3*": 60000, "4*": 160000, "5*": 1160000}
+    
         # Ask the user what the starting freshness level is (Enter to assume 0)
-        starting_freshness_input = input("\nFreshness levels: 1* = 10,000, 2* = 25,000, 3* = 60,000, 4* = 160,000, 5* = 1,160,000\nEnter the starting freshness level (press Enter to assume 0): ")
-        
+        starting_freshness_input = input("\nFreshness levels: 1* = 10,000, 2* = 25,000, 3* = 60,000, 4* = 160,000, 5* = 1,160,000\nEnter the starting star level or numerical freshness amount (press Enter to assume 0): ")
+    
         # Remove commas from the input
         starting_freshness_input = starting_freshness_input.replace(',', '')
     
-        # Handle the case where the input is not a valid integer
-        try:
-            cum_freshness = int(starting_freshness_input) if starting_freshness_input else 0
-        except ValueError:
-            print("Invalid input. Please enter a valid number.")
-            # Handle the error as needed, e.g., set cum_freshness to a default value or ask the user again.
-    
+        # Handle the case where the input is a star level
+        if starting_freshness_input in freshness_mapping:
+            cum_freshness = freshness_mapping[starting_freshness_input]
+        else:
+            # Handle the case where the input is not a valid integer
+            try:
+                cum_freshness = int(starting_freshness_input) if starting_freshness_input else 0
+            except ValueError:
+                print("Invalid input. Please enter a valid number.")
+
             
     #------------------DATA FILTER
     
@@ -165,6 +174,7 @@ while True:
         
         # End of the program
         break
-
+    else:
+        first_run = False
 # TODO include private battles option
 # github options (if ui) - change vertical range, change average number (from 100), toggle min number to 1 vs default 

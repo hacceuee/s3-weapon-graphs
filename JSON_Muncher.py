@@ -15,7 +15,7 @@ def copy_file_locally(file_path, data):
         file.write(data)
     print(f"File has successfully been parsed and copied to {file_path}")
         
-def check_for_file(): 
+def check_for_file(first_run): 
     print("\n------FILE EVALUATION\n")
     # Check if data.json exists in the same directory
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -30,6 +30,11 @@ def check_for_file():
         if user_input != 'y':
             # If the user doesn't enter 'y', go to the else statement
             user_file_path = None
+        else:
+            if not first_run: 
+                print(f"\nContinuing with loaded file located at {file_path}")
+                return file_path
+            
     else:     # Ask for file path if not found
         user_file_path = None
         
@@ -37,8 +42,8 @@ def check_for_file():
         
         # Ask for file path of file to parse
         if user_file_path is None:
-            print(f"File not found: {file_path}")
-            user_file_path = input("Enter the absolute path to the data.json file downloaded from the Export (Splatoon 3) (JSON (stat.ink format, gzipped)) on your profile on stat.ink. It should be unzipped: ")
+            print(f"\nFile not found: {file_path}")
+            user_file_path = input("\nEnter the absolute path to the data.json file downloaded from the Export (Splatoon 3) (JSON (stat.ink format, gzipped)) on your profile on stat.ink. It should be unzipped: ")
             # Remove leading and trailing quotes and spaces from the user_file_path
             user_file_path = user_file_path.strip().strip('"')
         
@@ -52,7 +57,7 @@ def check_for_file():
         if data.strip().startswith('['):
             if not os.path.exists(file_path): # Copy file locally if it doesn't exist there 
                 copy_file_locally(file_path, data)
-            print("File successfully parsed")
+            print("\nFile successfully parsed")
             
         else:    # Modify file
             data = re.sub(r'}}\s*{"id":', '}},\n{"id":', data) # Add a comma between '}}' and '{"id":' 
