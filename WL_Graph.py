@@ -32,6 +32,8 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
             if freshness_benchmarks[index] > 0: 
                 plt.axvline(freshness_benchmarks[index], color='red', linestyle='dotted', linewidth=0.7)
     
+    Image_Saver.set_plot_size()
+    
     # Plotting the rolling win percentage
     plt.plot(num_games[::interval], games_df['rolling_win_percentage'][::interval], label='Average Win Percentage (n=100 games)', color='green')
     

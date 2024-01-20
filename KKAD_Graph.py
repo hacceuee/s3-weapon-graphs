@@ -28,6 +28,8 @@ def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_filter, weapon_f
             if freshness_benchmarks[index] > 0: 
                 plt.axvline(freshness_benchmarks[index], color='red', linestyle='dotted', linewidth=0.7)
     
+    Image_Saver.set_plot_size()
+    
     # Plotting the lines
     plt.plot(num_games[::interval], rolling_df['kill_permin'][::interval], label='Kill per minute', color='blue')
     plt.plot(num_games[::interval], rolling_df['killassist_permin'][::interval], label='Kill/Assist per minute', color='blue', linestyle='dashed', linewidth=0.8)
