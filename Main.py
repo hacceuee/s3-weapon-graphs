@@ -159,12 +159,12 @@ while True:
     user_choice = input("\nDo you want to export another graph (y/n)? ").lower()
 
     if user_choice != 'y': # If the user doesn't enter 'yes', exit the loop
-        print("\nThank you!\nThis project was created by hacceuee to be used with fetus_hina's https://stat.ink/. The github for this project can be found at https://github.com/hacceuee/s3-weapon-graphs. Press any key to exit.")
+        print("\nThank you!\n\nThis project was created by hacceuee to be used with fetus_hina's https://stat.ink/. The github for this project can be found at https://github.com/hacceuee/s3-weapon-graphs. Press any key to exit.")
         # Wait for user input
         input()
         
         # End of the program
         break
 
-# TODO parse json, include private battles option
+# TODO include private battles option
 # github options (if ui) - change vertical range, change average number (from 100), toggle min number to 1 vs default 
