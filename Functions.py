@@ -34,3 +34,25 @@ def calculate_freshness(game, game_time):
             if not knockout:
                 freshness += game.get("our_team_count") * 5  # Progress Bonus
     return freshness
+
+def count_weapons(data):
+    weapon_counts = {}
+    for game in data:
+        weapon_name = game.get('weapon', {}).get('name', {}).get('en_US')
+        if weapon_name:
+            weapon_counts[weapon_name] = weapon_counts.get(weapon_name, 0) + 1
+    return weapon_counts
+
+def sort_and_filter_weapons(weapon_counts, min_games=25):
+    # Sort weapons by usage count
+    sorted_weapons = sorted(weapon_counts.items(), key=lambda x: x[1], reverse=True)
+
+    # Filter weapons with less than min_games
+    sorted_weapons = [(weapon, count) for weapon, count in sorted_weapons if count >= min_games]
+
+    return sorted_weapons
+
+def display_sorted_weapons(sorted_weapons):
+    print("\n------ FILTER OPTIONS\n\nWeapons need 25 or more games to make a graph.\n")
+    for i, (weapon, count) in enumerate(sorted_weapons, start=1):
+        print(f"{i}: {weapon} ({count} games)")

@@ -1,3 +1,4 @@
 *.json
 _pycache_/
 Image Exports/
+*pyc

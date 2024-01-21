@@ -5,47 +5,56 @@ Created on Fri Jan 19 15:14:32 2024
 @author: hacceuee
 """
 
+import Dependencies
+
+# Check if dependencies are installed
+if not Dependencies.check_dependencies():
+    # Dependencies are not installed, ask user if they want to install
+    if Dependencies.install_dependencies():
+        # Try importing again after installation
+        import pandas
+        import matplotlib
+    else:
+        # User chose not to install, exit the program or handle accordingly
+        exit()
+        
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
 import math
 
+import warnings
+
+# Suppress DeprecationWarning related to pyarrow
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="pandas")
+
 import Functions
 import KKAD_Graph
 import WL_Graph
 import JSON_Muncher
+import Image_Saver
 
 #check dependencys, ask user if they want to install them via #install_dependencies()or manually & restart (panda and matplotlib)
 
-first_run = True # Parameter so file doesn't have to be reloaded if the user loops to get another image. 
+# Initialize variables outside the loop
+sorted_weapons = None
 
-while True: 
-    # Load JSON data
-        
-    file_path = JSON_Muncher.check_for_file(first_run)
-    with open(file_path, encoding="utf8") as file:
-        data = json.load(file)
-        
+Image_Saver.initialize_plot()
+first_run = True
 
-    #-------------------SORT WEAPONS AND DISPLAY
-        
-    # Count occurrences of each weapon type
-    weapon_counts = {}
-    for game in data:
-        weapon_name = game.get('weapon', {}).get('name', {}).get('en_US')
-        if weapon_name:
-            weapon_counts[weapon_name] = weapon_counts.get(weapon_name, 0) + 1
-    
-    # Sort weapons by usage count
-    sorted_weapons = sorted(weapon_counts.items(), key=lambda x: x[1], reverse=True)
-    
-    # Filter weapons with less than 25 games
-    sorted_weapons = [(weapon, count) for weapon, count in sorted_weapons if count >= 25]
-    
-    # Display the sorted weapons with counts
-    print("\n------ FILTER OPTIONS\n\nWeapons need 25 or more games to make a graph.\n")
-    for i, (weapon, count) in enumerate(sorted_weapons, start=1):
-        print(f"{i}: {weapon} ({count} games)")
+while True:
+    # Load JSON data if it's the first run or if the user chooses a new file
+    if first_run:
+        file_path = JSON_Muncher.check_for_file()
+        with open(file_path, encoding="utf8") as file:
+            raw_data = json.load(file)
+
+        # Sort and filter weapons on the first run
+        weapon_counts = Functions.count_weapons(raw_data)
+        sorted_weapons = Functions.sort_and_filter_weapons(weapon_counts)
+
+    # Display sorted weapons
+    Functions.display_sorted_weapons(sorted_weapons)
         
     # Cumulative freshness to be potentially modified in User Input 
     cum_freshness = 0
@@ -61,14 +70,29 @@ while True:
         weapon_index = int(weapon_filter_index) - 1
         if 0 <= weapon_index < len(sorted_weapons):
             weapon_filter = sorted_weapons[weapon_index][0]
-            data = [game for game in data if game.get('weapon', {}).get('name', {}).get('en_US') == weapon_filter]
-            
+            data = [game for game in raw_data if game.get('weapon', {}).get('name', {}).get('en_US') == weapon_filter]
+    else:
+        data = raw_data
     
-    # Ask the user for the interval (n)
-    interval_input = input("\n------ GRAPH OPTIONS\n\nEnter the interval for printing data points (e.g., 1 for every point, 2 for every 2nd point): ")
+    # Generate x-axis data (number of games)
+    num_games = range(1, len(data) + 1)
+    
+        # Ask the user for the interval (n)
+    interval_input = input(f"\n------ GRAPH OPTIONS\n\nEnter the interval for printing data points (e.g., 1 for every point, 2 for every 2nd point). Max is {round((len(num_games)/2) / 5) * 5}: ")
     
     # Set the default interval to 1 if the user just presses Enter
-    interval = int(interval_input) if interval_input else 1
+    default_interval = 1
+    max_interval_percentage = 0.5  # Maximum interval as a percentage of the number of games
+    
+    # Check if the input is a positive integer
+    if interval_input.isdigit():
+        interval = int(interval_input)
+        
+        # Check if the interval is within the limit
+        max_allowed_interval = max(default_interval, len(num_games) * max_interval_percentage)
+        interval = min(interval, max_allowed_interval)
+    else:
+        interval = default_interval
     
     # Ask the user if they'd like to include the star levels gained
     include_star_levels = input("\nInclude weapon star levels gained? [y/n(default)]: ").lower()
@@ -157,13 +181,6 @@ while True:
     
     # User input for choosing the graph type
     graph_choice = input("\nAvailable graphs:\n1: Splat Stats Over Time\n2: Win Stats Over Time\n\nEnter the number corresponding to the graph type to display:")
-    
-    #Image_Saver.set_plot_size()
-    # Adjust layout to add space between the header and the graph
-    plt.tight_layout(pad=2.0)
-    plt.rcParams["figure.figsize"]=[6.4,3.6]
-    plt.rcParams["figure.dpi"]=300  
-    plt.rcParams["figure.subplot.top"] = 0.85 # Set the default subplot top parameter to hopefully avoid cropping
     
     # Check user's choice and call the corresponding graph function
     if graph_choice == '1':

@@ -15,7 +15,7 @@ def copy_file_locally(file_path, data):
         file.write(data)
     print(f"File has successfully been parsed and copied to {file_path}")
         
-def check_for_file(first_run): 
+def check_for_file(): 
     print("\n------FILE EVALUATION\n")
     # Check if data.json exists in the same directory
     script_directory = os.path.dirname(os.path.abspath(__file__))
@@ -27,16 +27,13 @@ def check_for_file(first_run):
         # Ask the user whether to continue with the loaded file
         user_input = input("JSON found. Continue with this file? (y/n) or press enter to continue with the loaded file: ").lower()
     
-        if user_input != 'y':
-            # If the user doesn't enter 'y', go to the else statement
+        if user_input == 'n':
+            # If the user enters 'n', set user_file_path to None
             user_file_path = None
-        else:
-            if not first_run: 
-                print(f"\nContinuing with loaded file located at {file_path}")
-                return file_path
-            
-    else:     # Ask for file path if not found
+    else:
+        # Ask for file path if not found
         user_file_path = None
+
         
     while True: # File validation loop
         

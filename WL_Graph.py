@@ -7,6 +7,7 @@ Created on Fri Jan 19 21:27:09 2024
 """
 import matplotlib.pyplot as plt
 import math
+import numpy as np
 
 import Image_Saver
 
@@ -26,6 +27,10 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
     # Generate x-axis data (number of games)
     num_games = range(1, len(games_df) + 1)
     
+    # Calculate the trendline for the entire plot
+    coefficients = np.polyfit(num_games, games_df['rolling_win_percentage'], 1)
+    trendline = np.polyval(coefficients, num_games)
+    
     # Add Freshness lines 
     if include_star_levels: 
         for index in range(0,5):
@@ -35,6 +40,8 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
     # Plotting the rolling win percentage
     plt.plot(num_games[::interval], games_df['rolling_win_percentage'][::interval], label='Average Win Percentage (n=100 games)', color='green')
     
+    # Plot the trendline
+    plt.plot(num_games, trendline, label='Trendline', linestyle='--', color='#8cc2b3')
     
     #------------------GRAPH STUFF
     subheader = ""
