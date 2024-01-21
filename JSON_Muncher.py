@@ -57,7 +57,7 @@ def check_for_file(first_run):
         if data.strip().startswith('['):
             if not os.path.exists(file_path): # Copy file locally if it doesn't exist there 
                 copy_file_locally(file_path, data)
-            print("\nFile successfully parsed")
+            print("\nFile successfully parsed. Please wait while the games are processed.")
             
         else:    # Modify file
             data = re.sub(r'}}\s*{"id":', '}},\n{"id":', data) # Add a comma between '}}' and '{"id":' 

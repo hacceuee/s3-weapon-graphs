@@ -2,7 +2,7 @@
 """
 Created on Sat Jan 20 01:52:23 2024
 
-@author: alexa
+@author: hacceuee
 """
 
 import os
@@ -12,10 +12,10 @@ import matplotlib.pyplot as plt
 def set_plot_size():
     # Adjust layout to add space between the header and the graph
     plt.tight_layout(pad=2.0)
-    plt.rcParams["figure.figsize"]=[10,6]
+    plt.rcParams["figure.figsize"]=[8,4.5]
     plt.rcParams["figure.dpi"]=300  
-
-def save_image(plt, num_games, file_name, title, subheader):
+    
+def save_image(num_games, file_name, title, subheader):
 
     #Axis and legend formatting
     plt.legend(fontsize=9, handlelength=1)
@@ -34,8 +34,10 @@ def save_image(plt, num_games, file_name, title, subheader):
         
     # Specify the file path within the folder
     file_path = os.path.join(folder_name, file_name)
+    
+    #plt.rcParams["figure.subplot.top"] = 0.85 # Set the default subplot top parameter to hopefully avoid cropping
 
-    plt.savefig(file_path, dpi=300)
+    plt.savefig(file_path)
     print(f"\nFile saved at {file_path}")
     
     # Display the plot

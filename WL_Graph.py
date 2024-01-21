@@ -31,9 +31,7 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
         for index in range(0,5):
             if freshness_benchmarks[index] > 0: 
                 plt.axvline(freshness_benchmarks[index], color='red', linestyle='dotted', linewidth=0.7)
-    
-    Image_Saver.set_plot_size()
-    
+        
     # Plotting the rolling win percentage
     plt.plot(num_games[::interval], games_df['rolling_win_percentage'][::interval], label='Average Win Percentage (n=100 games)', color='green')
     
@@ -56,5 +54,4 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.0%}')) # Adjust y axis to be %s
     
     file_name = f"{weapon_filter}-WinRates_Over_Time.png"
-    Image_Saver.save_image(plt, num_games, file_name, title, subheader)
-
+    Image_Saver.save_image(num_games, file_name, title, subheader)

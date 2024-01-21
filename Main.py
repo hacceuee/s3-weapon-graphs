@@ -15,6 +15,8 @@ import KKAD_Graph
 import WL_Graph
 import JSON_Muncher
 
+#check dependencys, ask user if they want to install them via #install_dependencies()or manually & restart (panda and matplotlib)
+
 first_run = True # Parameter so file doesn't have to be reloaded if the user loops to get another image. 
 
 while True: 
@@ -155,6 +157,13 @@ while True:
     
     # User input for choosing the graph type
     graph_choice = input("\nAvailable graphs:\n1: Splat Stats Over Time\n2: Win Stats Over Time\n\nEnter the number corresponding to the graph type to display:")
+    
+    #Image_Saver.set_plot_size()
+    # Adjust layout to add space between the header and the graph
+    plt.tight_layout(pad=2.0)
+    plt.rcParams["figure.figsize"]=[6.4,3.6]
+    plt.rcParams["figure.dpi"]=300  
+    plt.rcParams["figure.subplot.top"] = 0.85 # Set the default subplot top parameter to hopefully avoid cropping
     
     # Check user's choice and call the corresponding graph function
     if graph_choice == '1':
