@@ -56,23 +56,23 @@ If not installed, the program will prompt you to install them. You can also inst
 Follow the prompts to load game data and generate weapon graphs.
 
 ### Graph Options: 
-Graph Interval: 
+**Graph Interval:**
    - During the graphing process, you'll be prompted to set the interval for data points on the graph.
    - The interval (n) represents how many data points are skipped before the next one is plotted.
    - For example, an interval of 1 means every data point is plotted, while an interval of 2 means every 2nd data point is plotted. This will smooth out the graph.
      Interval of 1: ![Classic Squiffer-KD_Over_Time interval 1](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/b08fc2fc-7c5c-4fa7-b9ca-2152dc39c9a3)
      Interval of 10: ![Classic Squiffer-KD_Over_Time interval 10](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/215118ff-6866-4aef-bc4f-c2ae71f15aae)
 
-Freshness:
+**Freshness:**
    - You'll also be prompted to include freshness markers.
    - Freshness markers are vertical red lines on the graphs, calculated based on game data.
    - If you choose to include freshness, the program will display freshness benchmarks as dotted red lines for better analysis.
 		- You can modify the starting freshness before you started recording your games with stat.ink. You can enter an integer (ex: 160,050) or a star level (ex: 3* or 4*)
 
-** Splat Stats Over Time **
+**Splat Stats Over Time:**
 - This graph plots a running average of K/per minutes, KA/per minute, and D/per minute over the last 100 games. Because of the nature of this data analysis method, weapons with fewer than 25 games can not be plotted.
 
-**Win Stats Over Time **
+**Win Stats Over Time:**
 - This graph plots a running average of your win percentage over the last 100 games. Because of the nature of this data analysis method, weapons with fewer than 25 games can not be plotted.
   Example graph (interval of 10, freshness markers included): ![Classic Squiffer-WinRates_Over_Time](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/b49b0758-d593-41cc-9b54-f29519d99fc4)
 
