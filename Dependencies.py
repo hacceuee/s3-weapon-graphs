@@ -5,12 +5,10 @@ Created on Sat Jan 20 11:45:33 2024
 @author: hacceuee
 """
 
-import subprocess
-
 def check_dependencies():
     try:
         import pandas
-        import matplotlib
+        import matplotlib.pyplot
 
         # Dependencies are installed
         return True

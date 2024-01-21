@@ -13,16 +13,13 @@ if not Dependencies.check_dependencies():
     if Dependencies.install_dependencies():
         # Try importing again after installation
         import pandas
-        import matplotlib
+        import matplotlib.pyplot
     else:
         # User chose not to install, exit the program or handle accordingly
         exit()
         
 import json
 import pandas as pd
-import matplotlib.pyplot as plt
-import math
-
 import warnings
 
 # Suppress DeprecationWarning related to pyarrow

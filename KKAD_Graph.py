@@ -6,9 +6,9 @@ Created on Fri Jan 19 19:17:39 2024
 """
 
 import matplotlib.pyplot as plt
-import math
 
 import Image_Saver
+import Functions
 
 def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_filter, weapon_filter_index, include_star_levels):
 
@@ -22,17 +22,15 @@ def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_filter, weapon_f
     # Generate x-axis data (number of games)
     num_games = range(1, len(games_df) + 1)
         
-    # Add Freshness lines 
-    if include_star_levels: 
-        for index in range(0,5):
-            if freshness_benchmarks[index] > 0: 
-                plt.axvline(freshness_benchmarks[index], color='red', linestyle='dotted', linewidth=0.7)
-        
     # Plotting the lines
     plt.plot(num_games[::interval], rolling_df['kill_permin'][::interval], label='Kill per minute', color='blue')
     plt.plot(num_games[::interval], rolling_df['killassist_permin'][::interval], label='Kill/Assist per minute', color='blue', linestyle='dashed', linewidth=0.8)
     plt.plot(num_games[::interval], rolling_df['death_permin'][::interval], label='Death per minute', color='orange')
-           
+    
+    # Add Freshness lines 
+    if include_star_levels: 
+        Functions.graph_freshness(freshness_benchmarks)
+        
     #------------------GRAPH STUFF
     subheader = ""
     # Prepare subheader with weapon info, number of games, and interval

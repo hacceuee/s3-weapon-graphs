@@ -6,10 +6,10 @@ Created on Fri Jan 19 21:27:09 2024
 
 """
 import matplotlib.pyplot as plt
-import math
 import numpy as np
 
 import Image_Saver
+import Functions
 
 def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_filter_index, include_star_levels):
     
@@ -30,18 +30,16 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
     # Calculate the trendline for the entire plot
     coefficients = np.polyfit(num_games, games_df['rolling_win_percentage'], 1)
     trendline = np.polyval(coefficients, num_games)
-    
-    # Add Freshness lines 
-    if include_star_levels: 
-        for index in range(0,5):
-            if freshness_benchmarks[index] > 0: 
-                plt.axvline(freshness_benchmarks[index], color='red', linestyle='dotted', linewidth=0.7)
-        
+            
     # Plotting the rolling win percentage
     plt.plot(num_games[::interval], games_df['rolling_win_percentage'][::interval], label='Average Win Percentage (n=100 games)', color='green')
     
     # Plot the trendline
     plt.plot(num_games, trendline, label='Trendline', linestyle='--', color='#8cc2b3')
+    
+    # Add Freshness lines 
+    if include_star_levels: 
+        Functions.graph_freshness(freshness_benchmarks)
     
     #------------------GRAPH STUFF
     subheader = ""

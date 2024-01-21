@@ -6,6 +6,7 @@ Created on Fri Jan 19 16:57:28 2024
 """
 
 import math
+import matplotlib.pyplot as plt
 
 def calculate_freshness(game, game_time):
     freshness = 0
@@ -34,7 +35,20 @@ def calculate_freshness(game, game_time):
             if not knockout:
                 freshness += game.get("our_team_count") * 5  # Progress Bonus
     return freshness
-
+            
+def graph_freshness(freshness_benchmarks):
+    for index in range(5):
+            benchmark = freshness_benchmarks[index]
+            if benchmark > 0: 
+                plt.axvline(benchmark, color='red', linestyle='dotted', linewidth=0.7)
+                stars = '★' * (index + 1)
+                
+                # Calculate the position to move up by 1% of the graph height
+                y_position = plt.yticks()[0][0] + 0.01 * (plt.ylim()[1] - plt.ylim()[0])
+                
+                # Add vertical text label directly on the line, rotated vertically
+                plt.text(benchmark, y_position, f'{stars}', rotation='vertical', va='bottom', ha='right', color='red', fontsize=8)
+        
 def count_weapons(data):
     weapon_counts = {}
     for game in data:
@@ -56,3 +70,4 @@ def display_sorted_weapons(sorted_weapons):
     print("\n------ FILTER OPTIONS\n\nWeapons need 25 or more games to make a graph.\n")
     for i, (weapon, count) in enumerate(sorted_weapons, start=1):
         print(f"{i}: {weapon} ({count} games)")
+        
