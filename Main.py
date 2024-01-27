@@ -74,7 +74,7 @@ while True:
     # Generate x-axis data (number of games)
     num_games = range(1, len(data) + 1)
     
-        # Ask the user for the interval (n)
+    # Ask the user for the interval (n)
     interval_input = input(f"\n------ GRAPH OPTIONS\n\nEnter the interval for printing data points (e.g., 1 for every point, 2 for every 2nd point). Max is {round((len(num_games)/2) / 5) * 5}: ")
     
     # Set the default interval to 1 if the user just presses Enter
