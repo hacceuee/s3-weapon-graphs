@@ -6,12 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>980</width>
-    <height>649</height>
+    <width>1165</width>
+    <height>785</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Splatoon 3 Weapon Graphs by hacceuee</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.png</normaloff>icon.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>false</bool>
@@ -59,9 +63,32 @@
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>28</width>
+            <width>18</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="Mod_PlayerName">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>18</width>
             <height>20</height>
            </size>
           </property>
@@ -123,6 +150,13 @@
             </property>
             <property name="text">
              <string>Weapon Select:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Weapons need 25 or more games to make a graph.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
             </property>
            </widget>
           </item>
@@ -292,6 +326,13 @@
            </widget>
           </item>
           <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Enter the interval for printing data points: &lt;br/&gt;(e.g., 1 for every point, 2 for every 2nd point).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <layout class="QHBoxLayout" name="Layout_Interval">
             <item>
              <widget class="QLabel" name="Label_Interval">
@@ -317,7 +358,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>13</width>
-              <height>88</height>
+              <height>10</height>
              </size>
             </property>
            </spacer>
@@ -920,7 +961,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>10</width>
-              <height>88</height>
+              <height>10</height>
              </size>
             </property>
            </spacer>
@@ -928,6 +969,22 @@
          </layout>
         </item>
        </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>18</height>
+         </size>
+        </property>
+       </spacer>
       </item>
       <item>
        <layout class="QVBoxLayout" name="Layout_GraphSelections">
@@ -951,6 +1008,19 @@
           </property>
          </widget>
         </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
        </layout>
       </item>
      </layout>
@@ -962,7 +1032,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>980</width>
+     <width>1165</width>
      <height>26</height>
     </rect>
    </property>
@@ -970,6 +1040,10 @@
     <property name="title">
      <string>File</string>
     </property>
+    <addaction name="actionOpen_exports_folder"/>
+    <addaction name="separator"/>
+    <addaction name="actionGitHub"/>
+    <addaction name="separator"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuJSON_Import">
@@ -977,20 +1051,12 @@
      <string>JSON Import</string>
     </property>
     <addaction name="actionImport_new_file"/>
-    <addaction name="actionCheck_file_path"/>
+    <addaction name="actionOpen_file_location"/>
     <addaction name="separator"/>
     <addaction name="actionReload_file"/>
    </widget>
-   <widget class="QMenu" name="menuAbout">
-    <property name="title">
-     <string>About</string>
-    </property>
-    <addaction name="actionGitHub"/>
-    <addaction name="actionREADME_md"/>
-   </widget>
    <addaction name="menuFile"/>
    <addaction name="menuJSON_Import"/>
-   <addaction name="menuAbout"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionImport_new_file">
@@ -1031,6 +1097,21 @@
   <action name="actionREADME_md">
    <property name="text">
     <string>README.md</string>
+   </property>
+  </action>
+  <action name="actionOpen_file_location">
+   <property name="text">
+    <string>Open file location</string>
+   </property>
+  </action>
+  <action name="actionOpen_image_folders">
+   <property name="text">
+    <string>Open image folders</string>
+   </property>
+  </action>
+  <action name="actionOpen_exports_folder">
+   <property name="text">
+    <string>Open exports folder</string>
    </property>
   </action>
  </widget>

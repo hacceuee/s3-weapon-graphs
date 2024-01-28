@@ -5,13 +5,36 @@ Created on Sat Jan 27 13:52:08 2024
 @author: hacceuee
 """
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox, QFileDialog, QProgressBar
-from PyQt5.QtCore import Qt
-from PyQt5 import uic
-import sys
+import Dependencies
+
+# Check if dependencies are installed
+if not Dependencies.check_dependencies():
+    # Dependencies are not installed, ask user if they want to install
+    if Dependencies.install_dependencies():
+        # Try importing again after installation
+        import pandas
+        import matplotlib.pyplot
+        import PyQt5
+    else:
+        # User chose not to install, exit the program or handle accordingly
+        exit()
+        
 import json
 import pandas as pd
+import warnings
+
+# Suppress DeprecationWarning related to pyarrow
+warnings.filterwarnings("ignore", category=DeprecationWarning, module="pandas")
+# Supress loop warning
+
+
+from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox, QFileDialog, QProgressBar, QMessageBox
+from PyQt5.QtCore import Qt, QUrl
+from PyQt5 import uic
+from PyQt5.QtGui import QDesktopServices
+
 import threading
+import os
 
 import Functions
 import JSON_Muncher
@@ -32,10 +55,6 @@ class Application(QMainWindow):
         # Access the existing progress bar
         self.ProgressBar_Loading = self.findChild(QProgressBar, "ProgressBar_Loading")
         self.ProgressBar_Loading.hide()  # Initially hide the progress bar
-        
-        # Load database
-        file_path = JSON_Muncher.check_for_file()
-        self.load_file(file_path)
         
         #------------------ CONNECT ACTIONS
         self.DropDown_WeaponSelect = self.findChild(QComboBox, 'DropDown_WeaponSelect')
@@ -74,12 +93,30 @@ class Application(QMainWindow):
         
         # Connect the menu action to the update_file_path method
         self.actionImport_new_file.triggered.connect(self.update_file_path)
+        self.actionReload_file.triggered.connect(self.reload_file)
+        # Connect exit option
+        self.actionExit.triggered.connect(self.exit_program)
+        # Set up other menu actions
+        self.actionOpen_file_location.triggered.connect(self.open_file_location)
+        self.actionGitHub.triggered.connect(self.open_github)
+        self.actionOpen_exports_folder.triggered.connect(self.open_image_location)
+        
+        # Initialize variables
+        self.starting_freshness = 0  # Initial value
+        
+        # Print starting message to the terminal
+        print("Starting program...")
+        
+        # Load database
+        file_path = JSON_Muncher.check_for_file()
+        self.ProgressBar_Loading.setRange(0, 0)
+        self.start_loading_thread(file_path) # Start the loading thread
         
         # Show the app
         self.show()
         
-        # Initialize variables
-        self.starting_freshness = 0  # Initial value
+        # Print message to the terminal indicating that the program has started
+        print("\rProgram running.")
     
     def start_loading_thread(self, file_path):
         # Show the progress bar when loading starts
@@ -109,13 +146,18 @@ class Application(QMainWindow):
                 # Set initial count 
                 self.Mod_NumOfGames.setText(f"{len(self.raw_data)}")
                 self.Mod_FilePath.setText(file_path)
+                
+                self.player_name = self.raw_data[-1].get('user', {}).get('name')
+                self.Mod_PlayerName.setText(f"Games processed for: {self.player_name}")
+                self.Mod_PlayerName.setStyleSheet("color: rgba(0, 0, 0, 128);") 
+                
             else: 
-                self.Label_User_Updates.setText("Please load a .JSON file from stat.ink by going to JSON Import -> Import new file")
+                self.Label_User_Updates.setText("Import a .JSON file by navigating to 'JSON Import -> Import new file.' \nEnsure that the file has been downloaded and unzipped from the Export feature on your profile at stat.ink.")
                 self.Label_User_Updates.setStyleSheet("color: rgba(135, 32, 28, 255); font-weight: bold;")
             
         except json.JSONDecodeError:
             # If there's an error loading the file during startup, set the initial message
-            self.Label_User_Updates.setText("Please load a .JSON file from stat.ink by going to JSON Import -> Import new file")
+            self.Label_User_Updates.setText("Import a .JSON file by navigating to 'JSON Import -> Import new file.' \nEnsure that the file has been downloaded and unzipped from the Export feature on your profile at stat.ink.")
             self.Label_User_Updates.setStyleSheet("color: rgba(135, 32, 28, 255); font-weight: bold;")
         
         # Reset the progress bar value after loading is done
@@ -123,6 +165,15 @@ class Application(QMainWindow):
         
         # Hide the progress bar when loading is done
         self.ProgressBar_Loading.hide()
+    
+    def reload_file (self):
+        # Load database
+        file_path = JSON_Muncher.check_for_file()
+        self.ProgressBar_Loading.setRange(0, 0)
+        self.start_loading_thread(file_path) # Start the loading thread
+        
+        self.Label_User_Updates.setText(f"{file_path} has been reloaded.")
+        self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
     
     def build_game_dict(self):
         # Create a list to store dictionaries for each game
@@ -298,13 +349,17 @@ class Application(QMainWindow):
             include_star_levels = self.Check_IncludeFreshness.isChecked() if selected_item != "(No Filter)" else False
     
             # Call the graph_KKAD function with the required parameters
-            KKAD_Graph.graph_KKAD(
+            printed_file = KKAD_Graph.graph_KKAD(
                 self.games_df,
                 freshness_benchmarks,
                 interval,
                 weapon_name,
-                include_star_levels
-            )         
+                include_star_levels,
+                self.player_name
+            )     
+            
+            self.Label_User_Updates.setText(f"Graph has automatically been saved as {printed_file}")
+            self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
 
     def display_WL_graph(self):
         # Get the selected item text from the DropDown_WeaponSelect
@@ -325,13 +380,17 @@ class Application(QMainWindow):
         include_star_levels = self.Check_IncludeFreshness.isChecked() if selected_item != "(No Filter)" else False
         
         # Call the graph_WL function with the required parameters
-        WL_Graph.graph_WL(
+        printed_file = WL_Graph.graph_WL(
             self.games_df,
             freshness_benchmarks,
             interval,
             weapon_name,
-            include_star_levels
+            include_star_levels,
+            self.player_name
         )
+        
+        self.Label_User_Updates.setText(f"Graph has automatically been saved as {printed_file}")
+        self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
         
     def update_data_for_selected_weapon(self, index):
         
@@ -393,7 +452,36 @@ class Application(QMainWindow):
             self.ProgressBar_Loading.setRange(0, 0)
             self.start_loading_thread(new_path) # Start the loading thread
             self.Label_User_Updates.setText(f"{file_path} has successfully been parsed and copied to {new_path}")
-            self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);")  # 191 is 75% opacity
+            self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
+    
+    def open_file_location(self):
+        script_directory = os.path.dirname(os.path.abspath(__file__))
+        try:
+            # Open file location in the default file manager
+            QDesktopServices.openUrl(QUrl.fromLocalFile(script_directory))
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error opening file location: {str(e)}")
+
+    def open_github(self):
+        try:
+            # Open GitHub link in the default web browser
+            QDesktopServices.openUrl(QUrl("https://github.com/hacceuee/s3-weapon-graphs"))
+        except Exception as e:
+            QMessageBox.critical(self, "Error", f"Error opening GitHub link: {str(e)}")
+
+    def open_image_location(self):
+            try:
+                # Specify the path to the image location folder
+                image_folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Image Exports")
+    
+                # Open image location folder in the default file manager
+                QDesktopServices.openUrl(QUrl.fromLocalFile(image_folder_path))
+            except Exception as e:
+                QMessageBox.critical(self, "Error", f"Error opening image location: {str(e)}")
+        
+    def exit_program(self):
+        print("\rProgram terminated.")
+        self.close()
             
     
 if __name__ == "__main__":

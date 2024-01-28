@@ -5,13 +5,13 @@ Created on Fri Jan 19 21:27:09 2024
 @author: hacceuee
 
 """
-import matplotlib.pyplot as plt
+import matplotlib
 import numpy as np
 
 import Image_Saver
 import Functions
 
-def graph_WL(games_df, freshness_benchmarks, interval, weapon_name, include_star_levels):
+def graph_WL(games_df, freshness_benchmarks, interval, weapon_name, include_star_levels, player_name):
     
     # Calculate the rolling sum of wins and total games
     window_size = 100
@@ -43,7 +43,7 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_name, include_star
     
     #------------------GRAPH STUFF
     # Prepare subheader with weapon info, number of games, and interval
-    subheader = f"{weapon_name} | Number of Games: {len(num_games)+1} | Interval: {interval}"
+    subheader = f"{weapon_name} | Number of Games: {len(num_games)+1} | Interval: {interval} | Player: {player_name}"
     
     # Set up the title with subheader
     title = "Win Stats Over Time"
@@ -55,3 +55,5 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_name, include_star
     
     file_name = f"{weapon_name}-WinRates_Over_Time.png"
     Image_Saver.save_image(num_games, file_name, title, subheader)
+    
+    return file_name

@@ -18,16 +18,12 @@ def copy_file_locally(data):
     
     with open(ideal_file_path, 'w', encoding='utf-8') as file:
         file.write(data)
-    print(f"File has successfully been parsed and copied to {ideal_file_path}")
         
 def check_for_file(): 
-    print("\n------FILE EVALUATION\n")
     # Check if data.json exists in the same directory
     file_path = ideal_file_path
     
-    if os.path.exists(file_path):
-        print("JSON found")
-        
+    if os.path.exists(file_path):        
         # Correct file
         if correct_file(file_path):
             return file_path
@@ -43,7 +39,6 @@ def correct_file(file_path):
     if data.strip().startswith('['):
         if file_path != ideal_file_path: # Copy file locally if it doesn't exist there 
             copy_file_locally(data)
-        print("\nFile successfully parsed. Please wait while the games are processed.")
         
     else:    # Modify file
         data = re.sub(r'}}\s*{"id":', '}},\n{"id":', data) # Add a comma between '}}' and '{"id":' 
@@ -56,7 +51,6 @@ def correct_file(file_path):
             json.load(file)
         return True
     except json.JSONDecodeError:
-        print("Invalid JSON file. Please provide a valid JSON file.")
         return False
 
 def import_new_file(file_path):
