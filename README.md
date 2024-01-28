@@ -82,8 +82,34 @@ The below options provide options for generating weapon graphs.
 - This graph plots a running average of your win percentage over the last 100 games. Because of the nature of this data analysis method, weapons with fewer than 25 games can not be plotted.
   Example graph (interval of 10, freshness markers included): ![Classic Squiffer-WinRates_Over_Time](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/b49b0758-d593-41cc-9b54-f29519d99fc4)
 
-**Notes**
-The options in the right hand column have not yet been implemented. 
+### Graph Display Options:
+**Reset the view:**  ![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/67262823-07fc-4f55-b54b-3ffac8d0fc0e)
+
+- Reset to the home/default view.
+- Backwards to previous view (undo view).
+- Forwards to next view (redo view).
+
+**Change the view:**   ![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/9d2d1912-d332-4ad6-b624-39aaa6284959)
+
+- Left button pans, right button zooms. If you hold x or y while you click with the left or right mouse button, that axis will be locked so you are only manipulating one axis. 
+- Zoom to selection. If you hold x or y while you make your selection, you will keep that axis the same. 
+
+**Axis and Graph Appearance:**  ![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/7277452d-866d-4835-a024-3c41e9bf00b9)
+
+- Configure the subplot. Adjsut margins and padding. 
+
+- Edit axis parameters.  This will allow you to change the axis scales and min/maxes (both x and y), change axis titles, and change the colors of the lines:
+
+![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/092570b6-9afb-48f3-bcd8-4ef8f50f02e4)
+![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/e33f845d-fb87-49c0-817c-19f50a66c05c)
+
+- You can toggle between different lines on the graph with the drop-down menu:
+ 
+ ![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/b3cd454f-bfa8-4ce8-8fb2-3c71ae5410db)
+
+**Save**  ![image](https://github.com/hacceuee/s3-weapon-graphs/assets/54909901/21dfa638-3c07-4e2d-aeb4-aa4eeb8e2b4f)
+
+- These changes aren't automatically saved. Please use the save tool to reexport the graph. 
 
 ## Feedback
 
