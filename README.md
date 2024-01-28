@@ -44,7 +44,7 @@ If not installed, the program will prompt you to install them. You can also inst
    - Navigate to the directory where you have the program files.
 
 7. **Provide the JSON File Path:**
-   - Run the program (`main.py`).
+   - Run the program (`Run_UI.py`).
    - If prompted, import your .JSON file via JSON Import -> Import new file in the top menu. 
 
 8. **Explore Graphs:**

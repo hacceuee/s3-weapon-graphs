@@ -41,12 +41,19 @@ def save_image(num_games, file_name, title, subheader):
     subheader_text = plt.text(0.5, 1.01, subheader, fontsize=9, ha='center', va='bottom', transform=plt.gca().transAxes)
     
     #------------------SAVING FILE
-    # Create a folder if it doesn't exist
-    folder_name = "Image Exports"
-
+    # Get the directory of the current script
+    script_directory = os.path.dirname(os.path.abspath(__file__))
+    
+    # Move up one directory to the parent folder
+    parent_directory = os.path.dirname(script_directory)
+    
+    # Join the parent directory with the desired subfolder
+    folder_name = os.path.join(parent_directory, "Image Exports")
+    
+    # Create the folder if it doesn't exist
     if not os.path.exists(folder_name):
         os.makedirs(folder_name)
-        
+    
     # Specify the file path within the folder
     file_path = os.path.join(folder_name, file_name)
     

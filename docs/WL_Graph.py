@@ -5,7 +5,7 @@ Created on Fri Jan 19 21:27:09 2024
 @author: hacceuee
 
 """
-import matplotlib
+import matplotlib.pyplot as plt
 import numpy as np
 
 import Image_Saver

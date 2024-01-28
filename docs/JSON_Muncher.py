@@ -9,8 +9,14 @@ import os
 import re
 import json
 
+# Get the directory of the current script
 script_directory = os.path.dirname(os.path.abspath(__file__))
-ideal_file_path = os.path.join(script_directory, "data.json")
+
+# Move up one directory to the parent folder
+parent_directory = os.path.dirname(script_directory)
+
+# Join the parent directory with the desired subfolder and file name
+ideal_file_path = os.path.join(parent_directory, "data.json")
 
 
 #------------------WRITES DATA FILE TO LOCAL JSON

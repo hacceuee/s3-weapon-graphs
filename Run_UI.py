@@ -5,6 +5,14 @@ Created on Sat Jan 27 13:52:08 2024
 @author: hacceuee
 """
 
+
+import sys
+import os
+
+# Add the 'docs' folder to the Python path
+docs_path = os.path.join(os.path.dirname(__file__), 'docs')
+sys.path.append(docs_path)
+
 import Dependencies
 
 # Check if dependencies are installed
@@ -34,7 +42,6 @@ from PyQt5 import uic
 from PyQt5.QtGui import QDesktopServices
 
 import threading
-import os
 
 import Functions
 import JSON_Muncher
@@ -50,7 +57,8 @@ class Application(QMainWindow):
         super(Application, self).__init__()
         
         # Load the UI file 
-        uic.loadUi("Main_UI.ui", self)
+        ui_file_path = os.path.join(docs_path, "Main_UI.ui")
+        uic.loadUi(ui_file_path, self)
         
         # Access the existing progress bar
         self.ProgressBar_Loading = self.findChild(QProgressBar, "ProgressBar_Loading")
