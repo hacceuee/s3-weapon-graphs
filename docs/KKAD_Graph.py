@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 import Image_Saver
 import Functions
 
-def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_filter, weapon_filter_index, include_star_levels):
+def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_name, include_star_levels, player_name):
 
     # Calculate the rolling average
     window_size = 100
@@ -32,13 +32,8 @@ def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_filter, weapon_f
         Functions.graph_freshness(freshness_benchmarks)
         
     #------------------GRAPH STUFF
-    subheader = ""
     # Prepare subheader with weapon info, number of games, and interval
-    if weapon_filter_index and weapon_filter_index.isdigit():
-        subheader += f"Weapon: {weapon_filter} | "
-    else: 
-        subheader += "All Weapons | "
-    subheader += f"Number of Games: {len(num_games)+1} | Interval: {interval}"
+    subheader = f"{weapon_name} | Number of Games: {len(num_games)+1} | Interval: {interval} | Player: {player_name}"
     
     # Set up the title with subheader
     title = "Splat Stats Over Time"
@@ -47,5 +42,7 @@ def graph_KKAD(games_df, freshness_benchmarks, interval, weapon_filter, weapon_f
     plt.xlabel('Number of Games')
     plt.ylabel('Rates per Minute')
             
-    file_name = f"{weapon_filter}-KD_Over_Time.png"
+    file_name = f"{weapon_name}-KD_Over_Time.png"
     Image_Saver.save_image(num_games, file_name, title, subheader)
+    
+    return file_name

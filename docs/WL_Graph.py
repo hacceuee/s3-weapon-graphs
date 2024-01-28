@@ -11,7 +11,7 @@ import numpy as np
 import Image_Saver
 import Functions
 
-def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_filter_index, include_star_levels):
+def graph_WL(games_df, freshness_benchmarks, interval, weapon_name, include_star_levels, player_name):
     
     # Calculate the rolling sum of wins and total games
     window_size = 100
@@ -42,13 +42,8 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
         Functions.graph_freshness(freshness_benchmarks)
     
     #------------------GRAPH STUFF
-    subheader = ""
     # Prepare subheader with weapon info, number of games, and interval
-    if weapon_filter_index and weapon_filter_index.isdigit():
-        subheader += f"Weapon: {weapon_filter} | "
-    else: 
-        subheader += "All Weapons | "
-    subheader += f"Number of Games: {len(num_games)+1} | Interval: {interval}"
+    subheader = f"{weapon_name} | Number of Games: {len(num_games)+1} | Interval: {interval} | Player: {player_name}"
     
     # Set up the title with subheader
     title = "Win Stats Over Time"
@@ -58,5 +53,7 @@ def graph_WL(games_df, freshness_benchmarks, interval, weapon_filter, weapon_fil
     plt.ylabel('Average Win Percentage')
     plt.gca().yaxis.set_major_formatter(plt.FuncFormatter(lambda x, _: f'{x:.0%}')) # Adjust y axis to be %s
     
-    file_name = f"{weapon_filter}-WinRates_Over_Time.png"
+    file_name = f"{weapon_name}-WinRates_Over_Time.png"
     Image_Saver.save_image(num_games, file_name, title, subheader)
+    
+    return file_name

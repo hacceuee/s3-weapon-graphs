@@ -1,0 +1,1120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1165</width>
+    <height>785</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Splatoon 3 Weapon Graphs by hacceuee</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>icon.png</normaloff>icon.png</iconset>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QGridLayout" name="gridLayout_2">
+    <property name="leftMargin">
+     <number>30</number>
+    </property>
+    <property name="topMargin">
+     <number>30</number>
+    </property>
+    <property name="rightMargin">
+     <number>30</number>
+    </property>
+    <property name="bottomMargin">
+     <number>30</number>
+    </property>
+    <item row="0" column="0">
+     <layout class="QVBoxLayout" name="Main_Layout">
+      <item>
+       <layout class="QHBoxLayout" name="Layout_Header">
+        <property name="spacing">
+         <number>6</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="Label_FilePathLoaded">
+          <property name="text">
+           <string>File path loaded: </string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="Mod_FilePath">
+          <property name="text">
+           <string>N/A</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="Layout_LoadingBar"/>
+        </item>
+        <item>
+         <spacer name="Space_FilePath">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>18</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QLabel" name="Mod_PlayerName">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>18</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QProgressBar" name="ProgressBar_Loading">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="value">
+           <number>0</number>
+          </property>
+          <property name="textVisible">
+           <bool>false</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QLabel" name="Label_User_Updates">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="Spacer_Top">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Minimum</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="Layout_GraphOptions">
+        <property name="spacing">
+         <number>20</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="Layout_WeaponSelect">
+          <item>
+           <widget class="QLabel" name="Label_WeaponSelect">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+              <underline>false</underline>
+             </font>
+            </property>
+            <property name="text">
+             <string>Weapon Select:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Weapons need 25 or more games to make a graph.&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QComboBox" name="DropDown_WeaponSelect"/>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="Layout_WeaponStatsText">
+            <item>
+             <widget class="QLabel" name="Text_SelectedWeaponStats">
+              <property name="autoFillBackground">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Selected Weapon Stats </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="Layout_AverageStatsSpaced">
+              <item>
+               <spacer name="Space_WeaponSelect">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>18</width>
+                  <height>153</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <layout class="QGridLayout" name="Layout_AverageStats">
+                <item row="4" column="1">
+                 <widget class="QLabel" name="Mod_AverD">
+                  <property name="text">
+                   <string>XX</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="4" column="0">
+                 <widget class="QLabel" name="Label_AverD">
+                  <property name="text">
+                   <string>Average D/min:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QLabel" name="Mod_WeaponName">
+                  <property name="text">
+                   <string>All Weapons</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="1">
+                 <widget class="QLabel" name="Mod_AverKA">
+                  <property name="text">
+                   <string>XX</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="Label_WeaponName">
+                  <property name="text">
+                   <string>Weapon: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="1">
+                 <widget class="QLabel" name="Mod_AverWL">
+                  <property name="text">
+                   <string>XX</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
+                 <widget class="QLabel" name="Label_AverK">
+                  <property name="text">
+                   <string>Average K/min: </string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="5" column="0">
+                 <widget class="QLabel" name="Label_AverWL">
+                  <property name="text">
+                   <string>Average Win %:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="3" column="0">
+                 <widget class="QLabel" name="Label_AverKA">
+                  <property name="text">
+                   <string>Average KA/min:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="0">
+                 <widget class="QLabel" name="Label_NumOfGames">
+                  <property name="text">
+                   <string>Number of Games:</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="1">
+                 <widget class="QLabel" name="Mod_AverK">
+                  <property name="text">
+                   <string>XX</string>
+                  </property>
+                 </widget>
+                </item>
+                <item row="1" column="1">
+                 <widget class="QLabel" name="Mod_NumOfGames">
+                  <property name="text">
+                   <string>XX</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="Spacer_WeaponEnd">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Maximum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>13</width>
+              <height>13</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="Line" name="Line_WeaponSelectEnd">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="Check_IncludePrivate">
+            <property name="enabled">
+             <bool>true</bool>
+            </property>
+            <property name="text">
+             <string>Include private matches</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="Line" name="Line_PrivateMatchesEnd">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Enter the interval for printing data points: &lt;br/&gt;(e.g., 1 for every point, 2 for every 2nd point).&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="Layout_Interval">
+            <item>
+             <widget class="QLabel" name="Label_Interval">
+              <property name="text">
+               <string>Interval: </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="Spin_IntervalInput">
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="Spacer_ColumnBuffer_1">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>13</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="Line_Column1to2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="Layout_Freshness">
+          <item>
+           <widget class="QCheckBox" name="Check_IncludeFreshness">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
+            <property name="text">
+             <string>Include freshness on graph</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="Layout_FreshnessSelectionsSpaced">
+            <item>
+             <spacer name="Space_FreshnessSelect">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>18</width>
+                <height>153</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="Layout_FreshnessSelections">
+              <item>
+               <widget class="QRadioButton" name="Radio_1Star">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>★☆☆☆☆ (10,000)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="Radio_2Star">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>★★☆☆☆ (25,000)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="Radio_3Star">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>★★★☆☆ (60,000)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="Radio_4Star">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>★★★★☆ (160,000)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QRadioButton" name="Radio_5Star">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>★★★★★ (1,160,000)</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="Layout_Freshness_OtherOption">
+                <item>
+                 <widget class="QRadioButton" name="Radio_Other">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Other:</string>
+                  </property>
+                  <property name="checked">
+                   <bool>false</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QSpinBox" name="Spin_FreshnessInput">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="maximum">
+                   <number>1160000</number>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="Layout_FreshnessCalcs">
+            <item>
+             <spacer name="Spacer_FreshnessCalcOptions">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Maximum</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>5</width>
+                <height>10</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QLabel" name="Label_CalcFreshness">
+              <property name="text">
+               <string>Calculated freshness milestone games:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="Layout_FreshnessCalcsSpaced">
+              <item>
+               <spacer name="Spacer_FreshnessCalc">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                 <enum>QSizePolicy::Fixed</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>18</width>
+                  <height>153</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="Layout_FreshnessCalcDisplay">
+                <item>
+                 <layout class="QHBoxLayout" name="Layout_StartingFreshness">
+                  <item>
+                   <widget class="QLabel" name="Label_StartingFreshness">
+                    <property name="text">
+                     <string>Starting freshness: </string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLabel" name="Mod_StartingFreshness">
+                    <property name="text">
+                     <string>0</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QGridLayout" name="Layout_Freshness_Display">
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="Label_FreshnessReached">
+                    <property name="font">
+                     <font>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Freshness Reached:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="Label_1Star">
+                    <property name="text">
+                     <string>★☆☆☆☆</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="0">
+                   <widget class="QLabel" name="Label_4Star">
+                    <property name="text">
+                     <string>★★★★☆</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="5" column="1">
+                   <widget class="QLabel" name="Mod_4Star">
+                    <property name="text">
+                     <string>XX</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="0">
+                   <widget class="QLabel" name="Label_5Star">
+                    <property name="text">
+                     <string>★★★★★</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="0">
+                   <widget class="QLabel" name="Label_3Star">
+                    <property name="text">
+                     <string>★★★☆☆</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="1">
+                   <widget class="QLabel" name="Mod_2Star">
+                    <property name="text">
+                     <string>XX</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QLabel" name="Mod_1Star">
+                    <property name="text">
+                     <string>XX</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="1">
+                   <widget class="QLabel" name="Label_GameNumber">
+                    <property name="font">
+                     <font>
+                      <underline>true</underline>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Game Number:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="4" column="1">
+                   <widget class="QLabel" name="Mod_3Star">
+                    <property name="text">
+                     <string>XX</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="3" column="0">
+                   <widget class="QLabel" name="Label_2Star">
+                    <property name="text">
+                     <string>★★☆☆☆</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="6" column="1">
+                   <widget class="QLabel" name="Mod_5Star">
+                    <property name="text">
+                     <string>XX</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="Spacer_ColumnBuffer_2">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="Line" name="Line_Column2to3">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QVBoxLayout" name="Layout_Ranges">
+          <item>
+           <layout class="QVBoxLayout" name="Layout_YRange">
+            <item>
+             <widget class="QCheckBox" name="Check_YRange">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Modify y range (both)</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="Layout_YMin">
+              <item>
+               <widget class="QLabel" name="Label_YMin">
+                <property name="text">
+                 <string>First game:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="Spin_YMin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>1000000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="Layout_YMax">
+              <item>
+               <widget class="QLabel" name="Label_YMax">
+                <property name="font">
+                 <font>
+                  <underline>false</underline>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Last game:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QSpinBox" name="Spin_YMax">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <number>1</number>
+                </property>
+                <property name="maximum">
+                 <number>1000000</number>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="QPushButton" name="Button_YRange_Default">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Default</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Line" name="Line_YRangeEnd">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="Spacer_YRangeEnd">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Maximum</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QLabel" name="Label_PerGraphSettings">
+            <property name="font">
+             <font>
+              <weight>75</weight>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Per-Graph Settings:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QGridLayout" name="gridLayout">
+            <item row="1" column="1">
+             <layout class="QHBoxLayout" name="Layout_WL_XMin">
+              <item>
+               <widget class="QLabel" name="Label_WL_XMin">
+                <property name="text">
+                 <string>Minimum:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="Spin_WL_XMin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>%</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="2" column="0">
+             <layout class="QHBoxLayout" name="Layout_KAD_XMax">
+              <item>
+               <widget class="QLabel" name="Label_KAD_XMax">
+                <property name="text">
+                 <string>Maximum:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="Spin_KAD_XMax">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="minimum">
+                 <double>0.010000000000000</double>
+                </property>
+                <property name="value">
+                 <double>2.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="0">
+             <widget class="QPushButton" name="Button_KAD_XRange_Default">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Default</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QCheckBox" name="Check_KAD_XRange">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Modify x range (K/KA/KD)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <layout class="QHBoxLayout" name="Layout_KAD_XMin">
+              <item>
+               <widget class="QLabel" name="Label_KAD_XMin">
+                <property name="text">
+                 <string>Minimum:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="Spin_KAD_XMin">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="1">
+             <widget class="QPushButton" name="Button_WL_XRange_Default">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Default</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="Check_WL_XRange">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="text">
+               <string>Modify x range (W/L)</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <layout class="QHBoxLayout" name="Layout_WL_XMax">
+              <item>
+               <widget class="QLabel" name="Label_WL_XMax">
+                <property name="text">
+                 <string>Maximum:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QDoubleSpinBox" name="Spin_WL_XMax">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>%</string>
+                </property>
+                <property name="minimum">
+                 <double>1.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>100.000000000000000</double>
+                </property>
+                <property name="stepType">
+                 <enum>QAbstractSpinBox::DefaultStepType</enum>
+                </property>
+                <property name="value">
+                 <double>100.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="4" column="1">
+             <layout class="QVBoxLayout" name="Layout_WL_XRange">
+              <item>
+               <widget class="Line" name="Line_WL_XRangeEnd">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="Check_WL_Trendline">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Include trendline (W/L only)</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <spacer name="Spacer_ColumnBuffer_3">
+            <property name="orientation">
+             <enum>Qt::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>10</width>
+              <height>10</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Fixed</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>10</width>
+          <height>18</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="Layout_GraphSelections">
+        <item>
+         <widget class="QPushButton" name="Button_KAD_Graph">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>K/KA/D Graph</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="Button_WL_Graph">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="text">
+           <string>W/L Graph</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1165</width>
+     <height>26</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionOpen_exports_folder"/>
+    <addaction name="separator"/>
+    <addaction name="actionGitHub"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+   </widget>
+   <widget class="QMenu" name="menuJSON_Import">
+    <property name="title">
+     <string>JSON Import</string>
+    </property>
+    <addaction name="actionImport_new_file"/>
+    <addaction name="actionOpen_file_location"/>
+    <addaction name="separator"/>
+    <addaction name="actionReload_file"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuJSON_Import"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionImport_new_file">
+   <property name="text">
+    <string>Import new file</string>
+   </property>
+  </action>
+  <action name="actionCheck_file_path">
+   <property name="text">
+    <string>Check file path</string>
+   </property>
+  </action>
+  <action name="actionSave_graph">
+   <property name="text">
+    <string>Save graph</string>
+   </property>
+  </action>
+  <action name="actionReset_graph">
+   <property name="text">
+    <string>Reset graph</string>
+   </property>
+  </action>
+  <action name="actionReload_file">
+   <property name="text">
+    <string>Reload file</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionGitHub">
+   <property name="text">
+    <string>GitHub</string>
+   </property>
+  </action>
+  <action name="actionREADME_md">
+   <property name="text">
+    <string>README.md</string>
+   </property>
+  </action>
+  <action name="actionOpen_file_location">
+   <property name="text">
+    <string>Open file location</string>
+   </property>
+  </action>
+  <action name="actionOpen_image_folders">
+   <property name="text">
+    <string>Open image folders</string>
+   </property>
+  </action>
+  <action name="actionOpen_exports_folder">
+   <property name="text">
+    <string>Open exports folder</string>
+   </property>
+  </action>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

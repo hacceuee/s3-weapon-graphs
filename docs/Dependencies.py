@@ -9,6 +9,7 @@ def check_dependencies():
     try:
         import pandas
         import matplotlib.pyplot
+        import PyQt5
 
         # Dependencies are installed
         return True
@@ -23,7 +24,7 @@ def install_dependencies():
     if install_choice == 'y':
         try:
             import subprocess
-            subprocess.run(['pip', 'install', '--user', 'pandas', 'matplotlib'], check=True)
+            subprocess.run(['pip', 'install', '--user', 'pandas', 'matplotlib', 'PyQt5'], check=True)
             print("Dependencies installed successfully.")
             return True
         except Exception as e:
@@ -32,6 +33,6 @@ def install_dependencies():
         except subprocess.CalledProcessError:
             print("Error installing dependencies. Please make sure you have pip installed.")
     else:
-        print("Please retry the program once you have installed the 'pandas' and 'matplotlib' modules.")
+        print("Please retry the program once you have installed the 'pandas', 'PyQt5', and 'matplotlib' modules.")
         return False
 
