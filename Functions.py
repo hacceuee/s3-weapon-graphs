@@ -71,3 +71,5 @@ def display_sorted_weapons(sorted_weapons):
     for i, (weapon, count) in enumerate(sorted_weapons, start=1):
         print(f"{i}: {weapon} ({count} games)")
         
+def averages_display():
+    pass

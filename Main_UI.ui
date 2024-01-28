@@ -928,7 +928,7 @@
         <item>
          <widget class="QPushButton" name="Button_KAD_Graph">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>K/KA/D Graph</string>
@@ -938,7 +938,7 @@
         <item>
          <widget class="QPushButton" name="Button_WL_Graph">
           <property name="enabled">
-           <bool>false</bool>
+           <bool>true</bool>
           </property>
           <property name="text">
            <string>W/L Graph</string>

@@ -10,9 +10,16 @@ from PyQt5.QtCore import Qt
 from PyQt5 import uic
 import sys
 import json
+import pandas as pd
 
 import Functions
 import JSON_Muncher
+import KKAD_Graph
+import WL_Graph
+import Image_Saver
+
+# Initialize variables outside the loop
+Image_Saver.initialize_plot()
 
 class Application(QMainWindow):
     def __init__(self):
@@ -35,6 +42,7 @@ class Application(QMainWindow):
         # Populate the QComboBox
         self.DropDown_WeaponSelect = self.findChild(QComboBox, 'DropDown_WeaponSelect')
         self.DropDown_WeaponSelect.addItems(weapon_list)
+        self.DropDown_WeaponSelect.currentIndexChanged.connect(self.update_data_for_selected_weapon)
         
         # QLabel fields for displaying information
         self.Mod_NumOfGames = self.findChild(QLabel, 'Mod_NumOfGames')
@@ -59,14 +67,48 @@ class Application(QMainWindow):
         # QSpinBox for getting user input for the interval
         self.Spin_IntervalInput = self.findChild(QSpinBox, 'Spin_IntervalInput')
         
-        # Connect the signal to the custom method
+        # Connect the Weapon select signal to the custom method
         self.DropDown_WeaponSelect.currentIndexChanged.connect(self.create_graph)
+        
+        # Connect the clicked signal of graph buttons to custom methods
+        self.Button_KAD_Graph.clicked.connect(self.display_KKAD_graph)
+        self.Button_WL_Graph.clicked.connect(self.display_WL_graph)
         
         # Show the app
         self.show()
         
         # Initialize variables
         self.cum_freshness = 0  # Initial value
+        
+    def build_game_dict(self):
+        # Create a list to store dictionaries for each game
+        games_list = []
+        
+        for game in self.data:
+            # Filter out draws, private battles, and games with missing data
+            if (
+                game.get("result") != "draw"
+                and game.get("lobby", {}).get("name", {}).get("en_US") != "Private Battle"
+                and game.get("kill") is not None
+                and (
+                    game.get("our_team_count") is not None
+                    or game.get("rule", {}).get("name", {}).get("en_US") in ["Turf War", "Tricolor Turf War"]
+                )
+            ):
+                # Get Time in Minutes
+                game_time = (game.get("end_at", {}).get("time", 0) - game.get("start_at", {}).get("time", 0)) / 60 
+        
+                game_dict = {
+                    'weapon': game['weapon']['name']['en_US'],
+                    'time_of_game': game_time,
+                    'win_state': game['result'],
+                    'kill_permin': game.get("kill") / game_time,
+                    'killassist_permin': game['kill_or_assist'] / game_time,
+                    'death_permin': game['death'] / game_time,
+                    'freshness_gained': Functions.calculate_freshness(game, game_time)
+                }
+            games_list.append(game_dict)
+        return games_list    
         
     def enable_freshness_checkbox(self):
         selected_weapon = self.DropDown_WeaponSelect.currentText()
@@ -85,11 +127,11 @@ class Application(QMainWindow):
         self.Radio_5Star.setEnabled(include_star_levels)
         self.Radio_Other.setEnabled(include_star_levels)
         
-    def update_freshness(self, value=None):
+    def update_freshness(self, state):
         # Enable Freshness Input if Other is selected
         self.Spin_FreshnessInput.setEnabled(self.Radio_Other.isChecked())
     
-        if value is not None:
+        if self.Radio_Other.isChecked():
             # Update freshness when the value of Spin_FreshnessInput changes
             star_level = self.get_selected_star_level()
             self.cum_freshness = self.Spin_FreshnessInput.value()
@@ -172,6 +214,77 @@ class Application(QMainWindow):
         self.Mod_4Star.setText(str(freshness_benchmarks[3]) if freshness_benchmarks[3] != -1 else "N/A")
         self.Mod_5Star.setText(str(freshness_benchmarks[4]) if freshness_benchmarks[4] != -1 else "N/A")
         
+        return freshness_benchmarks
+        
+    def display_KKAD_graph(self):
+            # Get the selected item text from the DropDown_WeaponSelect
+            selected_item = self.DropDown_WeaponSelect.currentText()
+            
+            if selected_item != "(No Filter)":
+                parts = selected_item.split()
+                weapon_name = ' '.join(parts[:-2])  # Join all parts except the last two
+            else: weapon_name = "All Weapons"
+    
+            # Get the interval from the Spin_IntervalInput
+            interval = self.Spin_IntervalInput.value()
+    
+            # Get freshness benchmarks from the update_cumulative_benchmarks function
+            freshness_benchmarks = self.update_cumulative_benchmarks()
+    
+            # Get include_star_levels based on the state of Check_IncludeFreshness
+            include_star_levels = self.Check_IncludeFreshness.isChecked() if selected_item != "(No Filter)" else False
+            
+            games_list = self.build_game_dict()
+            # Convert the list of dictionaries into a Pandas DataFrame
+            games_df = pd.DataFrame(games_list)
+    
+            # Call the graph_KKAD function with the required parameters
+            KKAD_Graph.graph_KKAD(
+                games_df,
+                freshness_benchmarks,
+                interval,
+                weapon_name,
+                include_star_levels
+            )
+
+    def display_WL_graph(self):
+        # Get the selected item text from the DropDown_WeaponSelect
+        selected_item = self.DropDown_WeaponSelect.currentText()
+        
+        if selected_item != "(No Filter)":
+            parts = selected_item.split()
+            weapon_name = ' '.join(parts[:-2])  # Join all parts except the last two
+        else: weapon_name = "All Weapons"
+
+        # Get the interval from the Spin_IntervalInput
+        interval = self.Spin_IntervalInput.value()
+
+        # Get freshness benchmarks from the update_cumulative_benchmarks function
+        freshness_benchmarks = self.update_cumulative_benchmarks()
+
+        # Get include_star_levels based on the state of Check_IncludeFreshness
+        include_star_levels = self.Check_IncludeFreshness.isChecked() if selected_item != "(No Filter)" else False
+        
+        games_list = self.build_game_dict()
+        # Convert the list of dictionaries into a Pandas DataFrame
+        games_df = pd.DataFrame(games_list)
+
+        # Call the graph_WL function with the required parameters
+        WL_Graph.graph_WL(
+            games_df,
+            freshness_benchmarks,
+            interval,
+            weapon_name,
+            include_star_levels
+        )
+        
+    def update_data_for_selected_weapon(self):
+        selected_weapon = self.DropDown_WeaponSelect.currentText()
+        # Filter data based on the selected weapon
+        self.data = [game for game in self.raw_data if game.get('weapon', {}).get('name', {}).get('en_US') == selected_weapon]
+        # Update cumulative benchmarks
+        self.update_cumulative_benchmarks()
+    
     def create_graph(self, index):
         # Get the selected item text
         selected_item = self.DropDown_WeaponSelect.currentText()
@@ -203,9 +316,6 @@ class Application(QMainWindow):
         max_allowed_interval = max(1, int(len(self.data) * max_interval_percentage))
         self.Label_Interval.setText(f"Graph Interval (Max - {max_allowed_interval}):")
         self.Spin_IntervalInput.setMaximum(max_allowed_interval) # Update QLabel_Interval text based on the number of games for the selected weapon
-        
-        
-        
 
 if __name__ == "__main__":
     app = QApplication([])
