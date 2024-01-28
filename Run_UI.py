@@ -44,11 +44,14 @@ class Application(QMainWindow):
         self.DropDown_WeaponSelect.addItems(weapon_list)
         self.DropDown_WeaponSelect.currentIndexChanged.connect(self.update_data_for_selected_weapon)
         
+        # Set initial count 
+        self.Mod_NumOfGames.setText(f"{len(self.raw_data)}")
+        
         # QLabel fields for displaying information
         self.Mod_NumOfGames = self.findChild(QLabel, 'Mod_NumOfGames')
         self.Mod_WeaponName = self.findChild(QLabel, 'Mod_WeaponName')
         
-        # Connect the signals to the custom methods
+        # Connect the Weapon select signal to the custom method
         self.DropDown_WeaponSelect.currentIndexChanged.connect(self.enable_freshness_checkbox)
         
         # Connect the stateChanged signal of Check_IncludeFreshness to the custom method
@@ -67,8 +70,8 @@ class Application(QMainWindow):
         # QSpinBox for getting user input for the interval
         self.Spin_IntervalInput = self.findChild(QSpinBox, 'Spin_IntervalInput')
         
-        # Connect the Weapon select signal to the custom method
-        self.DropDown_WeaponSelect.currentIndexChanged.connect(self.create_graph)
+        #Update freshness and games list if the user toggles the "Include Private" button
+        self.Check_IncludePrivate.stateChanged.connect(self.update_cumulative_benchmarks)
         
         # Connect the clicked signal of graph buttons to custom methods
         self.Button_KAD_Graph.clicked.connect(self.display_KKAD_graph)
@@ -78,38 +81,46 @@ class Application(QMainWindow):
         self.show()
         
         # Initialize variables
-        self.cum_freshness = 0  # Initial value
+        self.starting_freshness = 0  # Initial value
         
     def build_game_dict(self):
         # Create a list to store dictionaries for each game
         games_list = []
         
         for game in self.data:
-            # Filter out draws, private battles, and games with missing data
-            if (
-                game.get("result") != "draw"
-                and game.get("lobby", {}).get("name", {}).get("en_US") != "Private Battle"
-                and game.get("kill") is not None
-                and (
-                    game.get("our_team_count") is not None
-                    or game.get("rule", {}).get("name", {}).get("en_US") in ["Turf War", "Tricolor Turf War"]
-                )
-            ):
-                # Get Time in Minutes
-                game_time = (game.get("end_at", {}).get("time", 0) - game.get("start_at", {}).get("time", 0)) / 60 
-        
-                game_dict = {
-                    'weapon': game['weapon']['name']['en_US'],
-                    'time_of_game': game_time,
-                    'win_state': game['result'],
-                    'kill_permin': game.get("kill") / game_time,
-                    'killassist_permin': game['kill_or_assist'] / game_time,
-                    'death_permin': game['death'] / game_time,
-                    'freshness_gained': Functions.calculate_freshness(game, game_time)
-                }
+            # Check if "Check_IncludePrivate" is ticked
+            include_private = self.Check_IncludePrivate.isChecked()
+            
+            # Filter out draws
+            if game.get("result") == "draw":
+                continue  # Skip this game if it's a draw
+            
+            # Filter out private battles if "Check_IncludePrivate" is not ticked
+            if not include_private and game.get("lobby", {}).get("name", {}).get('en_US') == "Private Battle":
+                continue  # Skip this game if it's a private battle
+            
+            # Filter out my DCs by checking for nulls
+            if game.get("kill") is None:
+                continue  # Skip this game if results weren't uploaded fully
+            if game.get("our_team_count") is None and game.get("rule", {}).get("name", {}).get('en_US') not in ["Turf War", "Tricolor Turf War"]:
+                continue  # Skip this game if anarchy progress is None and mode is not Turf War or Tricolor Turf War
+            
+            # Get Time in Minutes
+            game_time = (game.get("end_at", {}).get("time", 0) - game.get("start_at", {}).get("time", 0)) / 60 
+    
+            game_dict = {
+                'weapon': game['weapon']['name']['en_US'],
+                'time_of_game': game_time,
+                'win_state': game['result'],
+                'kill_permin': game.get("kill") / game_time,
+                'killassist_permin': game['kill_or_assist'] / game_time,
+                'death_permin': game['death'] / game_time,
+                'freshness_gained': Functions.calculate_freshness(game, game_time)
+            }
             games_list.append(game_dict)
-        return games_list    
-        
+                
+        return games_list
+       
     def enable_freshness_checkbox(self):
         selected_weapon = self.DropDown_WeaponSelect.currentText()
 
@@ -127,6 +138,8 @@ class Application(QMainWindow):
         self.Radio_5Star.setEnabled(include_star_levels)
         self.Radio_Other.setEnabled(include_star_levels)
         
+        self.update_cumulative_benchmarks()
+        
     def update_freshness(self, state):
         # Enable Freshness Input if Other is selected
         self.Spin_FreshnessInput.setEnabled(self.Radio_Other.isChecked())
@@ -134,16 +147,16 @@ class Application(QMainWindow):
         if self.Radio_Other.isChecked():
             # Update freshness when the value of Spin_FreshnessInput changes
             star_level = self.get_selected_star_level()
-            self.cum_freshness = self.Spin_FreshnessInput.value()
+            self.starting_freshness = self.Spin_FreshnessInput.value()
         else:
             # Update freshness when a star selection changes
             star_level = self.get_selected_star_level()
-            self.cum_freshness = self.calculate_cum_freshness(star_level)
+            self.starting_freshness = self.calculate_starting_freshness(star_level)
     
-        # Format cum_freshness with commas
-        formatted_freshness = "{:,}".format(self.cum_freshness)
+        # Format starting_freshness with commas
+        formatted_freshness = "{:,}".format(self.starting_freshness)
     
-        # Set the text of Mod_StartingFreshness with the formatted cum_freshness
+        # Set the text of Mod_StartingFreshness with the formatted starting_freshness
         self.Mod_StartingFreshness.setText(formatted_freshness)
     
         # Perform cumulative calculations and check against freshness benchmarks
@@ -164,8 +177,8 @@ class Application(QMainWindow):
         else:
             return 0  # Default if none selected
 
-    def calculate_cum_freshness(self, star_level):
-        # Calculate cum_freshness based on the selected star level
+    def calculate_starting_freshness(self, star_level):
+        # Calculate starting_freshness based on the selected star level
         freshness_values = {1: 10000, 2: 25000, 3: 60000, 4: 160000, 5: 1160000}
         return freshness_values.get(star_level, 0)
         
@@ -174,31 +187,39 @@ class Application(QMainWindow):
         freshness_thresholds = [10000, 25000, 60000, 160000, 1160000]
         freshness_benchmarks = [-1, -1, -1, -1, -1]
         current_game = 0
+        cum_freshness = self.starting_freshness
     
         # Parse Game Data
         for game in self.data:
-            # Filter out draws, private battles, and incomplete results
-            if (
-                game.get("result") == "draw"
-                or game.get("lobby", {}).get("name", {}).get('en_US') == "Private Battle"
-                or game.get("kill") is None
-                or (
-                    game.get("our_team_count") is None
-                    and game.get("rule", {}).get("name", {}).get('en_US') not in ["Turf War", "Tricolor Turf War"]
-                )
-            ):
+            # Check if private battles should be included
+            if not self.Check_IncludePrivate.isChecked() and game.get("lobby", {}).get("name", {}).get('en_US') == "Private Battle":
                 continue
+            
+            # If private battles are included, increment current_game
+            if self.Check_IncludePrivate.isChecked() and game.get("lobby", {}).get("name", {}).get('en_US') == "Private Battle":
+               current_game += 1
+               continue
+    
+            # Filter out draws
+            if game.get("result") == "draw":
+                continue  # Skip this game if it's a draw
+            
+            # Filter out my DCs by checking for nulls
+            if game.get("kill") is None:
+                continue  # Skip this game if results weren't uploaded fully
+            if game.get("our_team_count") is None and game.get("rule", {}).get("name", {}).get('en_US') not in ["Turf War", "Tricolor Turf War"]:
+                continue  # Skip this game if anarchy progress is None and mode is not Turf War or Tricolor Turf War
     
             # Get Time in Minutes
             game_time = (game.get("end_at", {}).get("time", 0) - game.get("start_at", {}).get("time", 0)) / 60
     
             # Update cumulative freshness and check against thresholds
             current_game += 1
-            self.cum_freshness += Functions.calculate_freshness(game, game_time)
+            cum_freshness += Functions.calculate_freshness(game, game_time)
     
-            # Check cum_freshness against thresholds
+            # Check starting_freshness against thresholds
             for index in range(len(freshness_thresholds)):
-                if self.cum_freshness > freshness_thresholds[index]:
+                if cum_freshness > freshness_thresholds[index]:
                     if freshness_benchmarks[index] == -1:
                         freshness_benchmarks[index] = current_game
 
@@ -213,10 +234,11 @@ class Application(QMainWindow):
         self.Mod_3Star.setText(str(freshness_benchmarks[2]) if freshness_benchmarks[2] != -1 else "N/A")
         self.Mod_4Star.setText(str(freshness_benchmarks[3]) if freshness_benchmarks[3] != -1 else "N/A")
         self.Mod_5Star.setText(str(freshness_benchmarks[4]) if freshness_benchmarks[4] != -1 else "N/A")
-        
+       
         return freshness_benchmarks
         
     def display_KKAD_graph(self):
+        
             # Get the selected item text from the DropDown_WeaponSelect
             selected_item = self.DropDown_WeaponSelect.currentText()
             
@@ -233,19 +255,15 @@ class Application(QMainWindow):
     
             # Get include_star_levels based on the state of Check_IncludeFreshness
             include_star_levels = self.Check_IncludeFreshness.isChecked() if selected_item != "(No Filter)" else False
-            
-            games_list = self.build_game_dict()
-            # Convert the list of dictionaries into a Pandas DataFrame
-            games_df = pd.DataFrame(games_list)
     
             # Call the graph_KKAD function with the required parameters
             KKAD_Graph.graph_KKAD(
-                games_df,
+                self.games_df,
                 freshness_benchmarks,
                 interval,
                 weapon_name,
                 include_star_levels
-            )
+            )         
 
     def display_WL_graph(self):
         # Get the selected item text from the DropDown_WeaponSelect
@@ -265,27 +283,16 @@ class Application(QMainWindow):
         # Get include_star_levels based on the state of Check_IncludeFreshness
         include_star_levels = self.Check_IncludeFreshness.isChecked() if selected_item != "(No Filter)" else False
         
-        games_list = self.build_game_dict()
-        # Convert the list of dictionaries into a Pandas DataFrame
-        games_df = pd.DataFrame(games_list)
-
         # Call the graph_WL function with the required parameters
         WL_Graph.graph_WL(
-            games_df,
+            self.games_df,
             freshness_benchmarks,
             interval,
             weapon_name,
             include_star_levels
         )
         
-    def update_data_for_selected_weapon(self):
-        selected_weapon = self.DropDown_WeaponSelect.currentText()
-        # Filter data based on the selected weapon
-        self.data = [game for game in self.raw_data if game.get('weapon', {}).get('name', {}).get('en_US') == selected_weapon]
-        # Update cumulative benchmarks
-        self.update_cumulative_benchmarks()
-    
-    def create_graph(self, index):
+    def update_data_for_selected_weapon(self, index):
         # Get the selected item text
         selected_item = self.DropDown_WeaponSelect.currentText()
         
@@ -302,21 +309,37 @@ class Application(QMainWindow):
     
             # Update QLabel fields
             self.Mod_WeaponName.setText(f"{weapon_name}")
-            self.Mod_NumOfGames.setText(f"{len(self.data)}")
             
         else:
             # Clear QLabel fields if "(No Filter)" is selected
             self.data = self.raw_data 
             
-            self.Mod_WeaponName.clear()
-            self.Mod_NumOfGames.clear()
+            # Update QLabel fields
+            self.Mod_WeaponName.setText("All Weapons")
+
+        self.Mod_NumOfGames.setText(f"{len(self.data)}")
 
         # Set the maximum value for the QSpinBox based on the filtered data
         max_interval_percentage = 0.3  # Maximum interval as a percentage of the number of games for the selected weapon
         max_allowed_interval = max(1, int(len(self.data) * max_interval_percentage))
         self.Label_Interval.setText(f"Graph Interval (Max - {max_allowed_interval}):")
         self.Spin_IntervalInput.setMaximum(max_allowed_interval) # Update QLabel_Interval text based on the number of games for the selected weapon
-
+        
+        games_list = self.build_game_dict()
+        # Convert the list of dictionaries into a Pandas DataFrame
+        self.games_df = pd.DataFrame(games_list)
+        
+        # Make overall averages[] for the left column display
+        averages = Functions.averages_display(self.games_df)
+        # Assign averages to QLabel widgets
+        self.Mod_AverK.setText(f"{round(averages[0], 2)}")
+        self.Mod_AverKA.setText(f"{round(averages[1], 2)}")
+        self.Mod_AverD.setText(f"{round(averages[2], 2)}")
+        self.Mod_AverWL.setText(f"{round(averages[3], 2)}%")
+            
+        # Update cumulative benchmarks
+        freshness_benchmarks = self.update_cumulative_benchmarks()
+    
 if __name__ == "__main__":
     app = QApplication([])
     window = Application()

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1301</width>
-    <height>957</height>
+    <width>1011</width>
+    <height>823</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -156,28 +156,28 @@
               <item>
                <layout class="QGridLayout" name="Layout_AverageStats">
                 <item row="4" column="1">
-                 <widget class="QLabel" name="ModLabel_AverD">
+                 <widget class="QLabel" name="Mod_AverD">
                   <property name="text">
                    <string>XX</string>
                   </property>
                  </widget>
                 </item>
                 <item row="4" column="0">
-                 <widget class="QLabel" name="Label_AverWL_2">
+                 <widget class="QLabel" name="Label_AverD">
                   <property name="text">
-                   <string>Average W/L ratio:</string>
+                   <string>Average D/min:</string>
                   </property>
                  </widget>
                 </item>
                 <item row="0" column="1">
                  <widget class="QLabel" name="Mod_WeaponName">
                   <property name="text">
-                   <string>XX</string>
+                   <string>All Weapons</string>
                   </property>
                  </widget>
                 </item>
                 <item row="3" column="1">
-                 <widget class="QLabel" name="ModLabel_AverKA">
+                 <widget class="QLabel" name="Mod_AverKA">
                   <property name="text">
                    <string>XX</string>
                   </property>
@@ -191,7 +191,7 @@
                  </widget>
                 </item>
                 <item row="5" column="1">
-                 <widget class="QLabel" name="ModLabel_AverWL">
+                 <widget class="QLabel" name="Mod_AverWL">
                   <property name="text">
                    <string>XX</string>
                   </property>
@@ -207,7 +207,7 @@
                 <item row="5" column="0">
                  <widget class="QLabel" name="Label_AverWL">
                   <property name="text">
-                   <string>Average D/min:</string>
+                   <string>Average Win %:</string>
                   </property>
                  </widget>
                 </item>
@@ -226,7 +226,7 @@
                  </widget>
                 </item>
                 <item row="2" column="1">
-                 <widget class="QLabel" name="Mod_Label_AverK">
+                 <widget class="QLabel" name="Mod_AverK">
                   <property name="text">
                    <string>XX</string>
                   </property>
@@ -271,7 +271,7 @@
           <item>
            <widget class="QCheckBox" name="Check_IncludePrivate">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Include private matches</string>
@@ -956,7 +956,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1301</width>
+     <width>1011</width>
      <height>26</height>
     </rect>
    </property>

@@ -20,6 +20,7 @@ def calculate_freshness(game, game_time):
             freshness += math.floor(inked / 100) * 100
         else:
             freshness += 500
+    
     # Anarchy 
     else: 
         knockout = game.get("knockout")
@@ -35,6 +36,7 @@ def calculate_freshness(game, game_time):
             if not knockout:
                 freshness += game.get("our_team_count") * 5  # Progress Bonus
     return freshness
+
             
 def graph_freshness(freshness_benchmarks):
     for index in range(5):
@@ -71,5 +73,23 @@ def display_sorted_weapons(sorted_weapons):
     for i, (weapon, count) in enumerate(sorted_weapons, start=1):
         print(f"{i}: {weapon} ({count} games)")
         
-def averages_display():
-    pass
+def averages_display(games_df):
+    # Check if the DataFrame is empty
+    if games_df.empty:
+        return [0, 0, 0, 0]
+
+    # Calculate the sum of each metric
+    total_kill_permin = games_df['kill_permin'].sum()
+    total_killassist_permin = games_df['killassist_permin'].sum()
+    total_death_permin = games_df['death_permin'].sum()
+    total_wins = (games_df['win_state'] == 'win').sum()
+
+    # Calculate the averages
+    total_games = len(games_df)
+    average_kill_permin = total_kill_permin / total_games
+    average_killassist_permin = total_killassist_permin / total_games
+    average_death_permin = total_death_permin / total_games
+    average_win_percentage = (total_wins / total_games) * 100
+
+    # Return the array of averages
+    return [average_kill_permin, average_killassist_permin, average_death_permin, average_win_percentage]
