@@ -5,12 +5,13 @@ Created on Sat Jan 27 13:52:08 2024
 @author: hacceuee
 """
 
-from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox
+from PyQt5.QtWidgets import QMainWindow, QApplication, QComboBox, QLabel, QSpinBox, QDoubleSpinBox, QCheckBox, QFileDialog, QProgressBar
 from PyQt5.QtCore import Qt
 from PyQt5 import uic
 import sys
 import json
 import pandas as pd
+import threading
 
 import Functions
 import JSON_Muncher
@@ -28,24 +29,17 @@ class Application(QMainWindow):
         # Load the UI file 
         uic.loadUi("Main_UI.ui", self)
         
-        #------------------ LOAD ELEMENTS 
+        # Access the existing progress bar
+        self.ProgressBar_Loading = self.findChild(QProgressBar, "ProgressBar_Loading")
+        self.ProgressBar_Loading.hide()  # Initially hide the progress bar
         
+        # Load database
         file_path = JSON_Muncher.check_for_file()
-        with open(file_path, encoding="utf8") as file:
-            self.raw_data = json.load(file)
-            
-        # Get the list of weapons with counts
-        weapon_counts = Functions.count_weapons(self.raw_data)
-        sorted_weapons = Functions.sort_and_filter_weapons(weapon_counts)
-        weapon_list = ["(No Filter)"] + [f"{weapon[0]} ({weapon[1]} games)" for weapon in sorted_weapons]
-
-        # Populate the QComboBox
-        self.DropDown_WeaponSelect = self.findChild(QComboBox, 'DropDown_WeaponSelect')
-        self.DropDown_WeaponSelect.addItems(weapon_list)
-        self.DropDown_WeaponSelect.currentIndexChanged.connect(self.update_data_for_selected_weapon)
+        self.load_file(file_path)
         
-        # Set initial count 
-        self.Mod_NumOfGames.setText(f"{len(self.raw_data)}")
+        #------------------ CONNECT ACTIONS
+        self.DropDown_WeaponSelect = self.findChild(QComboBox, 'DropDown_WeaponSelect')
+        self.DropDown_WeaponSelect.currentIndexChanged.connect(self.update_data_for_selected_weapon)
         
         # QLabel fields for displaying information
         self.Mod_NumOfGames = self.findChild(QLabel, 'Mod_NumOfGames')
@@ -66,6 +60,7 @@ class Application(QMainWindow):
         self.Radio_4Star.toggled.connect(self.update_freshness)
         self.Radio_5Star.toggled.connect(self.update_freshness)
         self.Radio_Other.toggled.connect(self.update_freshness)
+
         
         # QSpinBox for getting user input for the interval
         self.Spin_IntervalInput = self.findChild(QSpinBox, 'Spin_IntervalInput')
@@ -77,12 +72,58 @@ class Application(QMainWindow):
         self.Button_KAD_Graph.clicked.connect(self.display_KKAD_graph)
         self.Button_WL_Graph.clicked.connect(self.display_WL_graph)
         
+        # Connect the menu action to the update_file_path method
+        self.actionImport_new_file.triggered.connect(self.update_file_path)
+        
         # Show the app
         self.show()
         
         # Initialize variables
         self.starting_freshness = 0  # Initial value
+    
+    def start_loading_thread(self, file_path):
+        # Show the progress bar when loading starts
+        self.ProgressBar_Loading.show()
+    
+        # Start a new thread for loading the file
+        loading_thread = threading.Thread(target=self.load_file, args=(file_path,))
+        loading_thread.start()
         
+    def load_file (self, file_path):
+        try: 
+            if file_path is not None:
+                with open(file_path, encoding="utf8") as file:
+                    self.raw_data = json.load(file)
+                
+                # Get the list of weapons with counts
+                weapon_counts = Functions.count_weapons(self.raw_data)
+                sorted_weapons = Functions.sort_and_filter_weapons(weapon_counts)
+                self.weapon_list = ["(No Filter)"] + [f"{weapon[0]} ({weapon[1]} games)" for weapon in sorted_weapons]
+                
+                # Clear existing items in QComboBox
+                self.DropDown_WeaponSelect.clear()
+        
+                # Populate the QComboBox with updated items
+                self.DropDown_WeaponSelect.addItems(self.weapon_list)
+                
+                # Set initial count 
+                self.Mod_NumOfGames.setText(f"{len(self.raw_data)}")
+                self.Mod_FilePath.setText(file_path)
+            else: 
+                self.Label_User_Updates.setText("Please load a .JSON file from stat.ink by going to JSON Import -> Import new file")
+                self.Label_User_Updates.setStyleSheet("color: rgba(135, 32, 28, 255); font-weight: bold;")
+            
+        except json.JSONDecodeError:
+            # If there's an error loading the file during startup, set the initial message
+            self.Label_User_Updates.setText("Please load a .JSON file from stat.ink by going to JSON Import -> Import new file")
+            self.Label_User_Updates.setStyleSheet("color: rgba(135, 32, 28, 255); font-weight: bold;")
+        
+        # Reset the progress bar value after loading is done
+        self.ProgressBar_Loading.setValue(0)
+        
+        # Hide the progress bar when loading is done
+        self.ProgressBar_Loading.hide()
+    
     def build_game_dict(self):
         # Create a list to store dictionaries for each game
         games_list = []
@@ -293,6 +334,7 @@ class Application(QMainWindow):
         )
         
     def update_data_for_selected_weapon(self, index):
+        
         # Get the selected item text
         selected_item = self.DropDown_WeaponSelect.currentText()
         
@@ -339,6 +381,20 @@ class Application(QMainWindow):
             
         # Update cumulative benchmarks
         freshness_benchmarks = self.update_cumulative_benchmarks()
+    
+    def update_file_path(self, file_path):
+        # Open file dialog
+        file_path, _ = QFileDialog.getOpenFileName(self, "Open File", "", "JSON File (*.json);; All Files (*)")
+        
+        # Pass file_path to JSON muncher
+        if file_path: 
+            new_path = JSON_Muncher.import_new_file(file_path)
+            # Set the progress bar to indeterminate mode while loading
+            self.ProgressBar_Loading.setRange(0, 0)
+            self.start_loading_thread(new_path) # Start the loading thread
+            self.Label_User_Updates.setText(f"{file_path} has successfully been parsed and copied to {new_path}")
+            self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);")  # 191 is 75% opacity
+            
     
 if __name__ == "__main__":
     app = QApplication([])

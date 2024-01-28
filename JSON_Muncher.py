@@ -9,65 +9,60 @@ import os
 import re
 import json
 
+script_directory = os.path.dirname(os.path.abspath(__file__))
+ideal_file_path = os.path.join(script_directory, "data.json")
+
+
 #------------------WRITES DATA FILE TO LOCAL JSON
-def copy_file_locally(file_path, data):
-    with open(file_path, 'w', encoding='utf-8') as file:
+def copy_file_locally(data):
+    
+    with open(ideal_file_path, 'w', encoding='utf-8') as file:
         file.write(data)
-    print(f"File has successfully been parsed and copied to {file_path}")
+    print(f"File has successfully been parsed and copied to {ideal_file_path}")
         
 def check_for_file(): 
     print("\n------FILE EVALUATION\n")
     # Check if data.json exists in the same directory
-    script_directory = os.path.dirname(os.path.abspath(__file__))
-    file_path = os.path.join(script_directory, "data.json")
+    file_path = ideal_file_path
     
-    # Ask the user whether to continue with the loaded file, or preparing to ask for a new file path
     if os.path.exists(file_path):
-        user_file_path = file_path
-        # Ask the user whether to continue with the loaded file
-        user_input = input("JSON found. Continue with this file? (y/n) or press enter to continue with the loaded file: ").lower()
+        print("JSON found")
+        
+        # Correct file
+        if correct_file(file_path):
+            return file_path
     
-        if user_input == 'n':
-            # If the user enters 'n', set user_file_path to None
-            user_file_path = None
-    else:
-        # Ask for file path if not found
-        user_file_path = None
+    return None
 
+def correct_file(file_path):
+    # Open file and modify it
+    with open(file_path, encoding="utf8") as file:
+        data = file.read()
+    
+    # Check first character for '['
+    if data.strip().startswith('['):
+        if file_path != ideal_file_path: # Copy file locally if it doesn't exist there 
+            copy_file_locally(data)
+        print("\nFile successfully parsed. Please wait while the games are processed.")
         
-    while True: # File validation loop
-        
-        # Ask for file path of file to parse
-        if user_file_path is None:
-            print(f"\nFile not found: {file_path}")
-            user_file_path = input("\nEnter the absolute path to the data.json file downloaded from the Export (Splatoon 3) (JSON (stat.ink format, gzipped)) on your profile on stat.ink. It should be unzipped: ")
-            # Remove leading and trailing quotes and spaces from the user_file_path
-            user_file_path = user_file_path.strip().strip('"')
-        
-        #------------------CORRECTING FILE
-        
-        # Open file and modify it
-        with open(user_file_path, encoding="utf8") as file:
-            data = file.read()
-        
-        # Check first character for '['
-        if data.strip().startswith('['):
-            if not os.path.exists(file_path): # Copy file locally if it doesn't exist there 
-                copy_file_locally(file_path, data)
-            print("\nFile successfully parsed. Please wait while the games are processed.")
-            
-        else:    # Modify file
-            data = re.sub(r'}}\s*{"id":', '}},\n{"id":', data) # Add a comma between '}}' and '{"id":' 
-            data = "[" + data + "]" # Add a starting '[' and ending ']'
-            copy_file_locally(file_path, data)
+    else:    # Modify file
+        data = re.sub(r'}}\s*{"id":', '}},\n{"id":', data) # Add a comma between '}}' and '{"id":' 
+        data = "[" + data + "]" # Add a starting '[' and ending ']'
+        copy_file_locally(data)
 
-        try:
-            # Attempt to open the modified file and parse it as JSON
-            with open(file_path, encoding="utf8") as file:
-                json.load(file)
-            break  # If successful, break out of the loop
-        except json.JSONDecodeError:
-            print("Invalid JSON file. Please provide a valid JSON file.")
-            user_file_path = None  # Reset user_file_path to trigger asking for a new path in the next iteration
+    try:
+        # Attempt to open the modified file and parse it as JSON
+        with open(ideal_file_path, encoding="utf8") as file:
+            json.load(file)
+        return True
+    except json.JSONDecodeError:
+        print("Invalid JSON file. Please provide a valid JSON file.")
+        return False
 
-    return file_path
+def import_new_file(file_path):
+    #------------------CORRECTING FILE
+    
+    if correct_file(file_path):
+        return ideal_file_path
+    
+    return None
