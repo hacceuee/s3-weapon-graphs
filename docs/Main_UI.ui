@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1165</width>
-    <height>785</height>
+    <width>1303</width>
+    <height>891</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,16 +23,16 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_2">
     <property name="leftMargin">
-     <number>30</number>
+     <number>20</number>
     </property>
     <property name="topMargin">
-     <number>30</number>
+     <number>20</number>
     </property>
     <property name="rightMargin">
-     <number>30</number>
+     <number>20</number>
     </property>
     <property name="bottomMargin">
-     <number>30</number>
+     <number>20</number>
     </property>
     <item row="0" column="0">
      <layout class="QVBoxLayout" name="Main_Layout">
@@ -171,7 +171,7 @@
                <bool>false</bool>
               </property>
               <property name="text">
-               <string>Selected Weapon Stats </string>
+               <string>Selected Weapon Stats:</string>
               </property>
              </widget>
             </item>
@@ -351,22 +351,88 @@
            </layout>
           </item>
           <item>
-           <widget class="Line" name="Line_YRangeEnd">
+           <widget class="Line" name="line_3">
             <property name="orientation">
              <enum>Qt::Horizontal</enum>
             </property>
            </widget>
           </item>
           <item>
-           <widget class="QCheckBox" name="Check_WL_Trendline">
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Enter the amount of games included in the rolling average:&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_3">
+            <item>
+             <widget class="QLabel" name="Label_RollingAverage">
+              <property name="text">
+               <string>Rolling average:</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="Spin_RollingAverage">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+              <property name="maximum">
+               <number>200</number>
+              </property>
+              <property name="value">
+               <number>100</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="text">
+             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Enter the first game to be displayed on the graph: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_4">
+            <item>
+             <widget class="QLabel" name="Label_FirstGame">
+              <property name="text">
+               <string>First game: </string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QSpinBox" name="Spin_FirstGame">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
+              <property name="minimum">
+               <number>1</number>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pushButton">
             <property name="enabled">
              <bool>false</bool>
             </property>
             <property name="text">
-             <string>Include trendline (W/L only)</string>
-            </property>
-            <property name="checked">
-             <bool>true</bool>
+             <string>Reset to Default</string>
             </property>
            </widget>
           </item>
@@ -424,6 +490,13 @@
             </item>
             <item>
              <layout class="QVBoxLayout" name="Layout_FreshnessSelections">
+              <item>
+               <widget class="QLabel" name="label_9">
+                <property name="text">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; color:#808080;&quot;&gt;Select starting freshness: &lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+                </property>
+               </widget>
+              </item>
               <item>
                <widget class="QRadioButton" name="Radio_1Star">
                 <property name="enabled">
@@ -673,6 +746,102 @@
            </layout>
           </item>
           <item>
+           <widget class="Line" name="Line_YRangeEnd">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_2">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout">
+              <item>
+               <widget class="QLabel" name="label_3">
+                <property name="text">
+                 <string>W/L Graph Options</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="Check_WL_Trendline">
+                <property name="enabled">
+                 <bool>false</bool>
+                </property>
+                <property name="text">
+                 <string>Include trendline</string>
+                </property>
+                <property name="checked">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item>
+             <widget class="Line" name="line">
+              <property name="orientation">
+               <enum>Qt::Vertical</enum>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <widget class="QLabel" name="label_4">
+                <property name="text">
+                 <string>K/KA/D Graph Options</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QCheckBox" name="Check_WL_Trendline_2">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Kills</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="Check_WL_Trendline_3">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Kills &amp;&amp; Assists</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="Check_WL_Trendline_4">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>Death</string>
+                  </property>
+                  <property name="checked">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
            <spacer name="Spacer_ColumnBuffer_2">
             <property name="orientation">
              <enum>Qt::Vertical</enum>
@@ -744,6 +913,16 @@
       </item>
      </layout>
     </item>
+    <item row="0" column="1">
+     <widget class="QFrame" name="graph_frame">
+      <property name="frameShape">
+       <enum>QFrame::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -751,7 +930,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1165</width>
+     <width>1303</width>
      <height>26</height>
     </rect>
    </property>

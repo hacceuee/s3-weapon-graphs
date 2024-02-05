@@ -25,11 +25,11 @@ def initialize_plot():
     plt.savefig("temp_plot.png")
     plt.close()
     
-def save_image(num_games, file_name, title, subheader):
+def save_image(num_games, starting_game, file_name, title, subheader):
 
     #Axis and legend formatting
     plt.legend(fontsize=9, handlelength=1)
-    plt.xlim(0-math.ceil(len(num_games)/50)+7, math.ceil(len(num_games)+len(num_games)/50))
+    plt.xlim(max(0 - math.ceil(len(num_games) / 50) + 7, starting_game - math.ceil(starting_game/50)), math.ceil(len(num_games)+len(num_games)/50))
     
     # Set y-axis ticks and add horizontal grid lines
     y_ticks = plt.yticks()[0]

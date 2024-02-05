@@ -91,6 +91,10 @@ class Application(QMainWindow):
         
         # QSpinBox for getting user input for the interval
         self.Spin_IntervalInput = self.findChild(QSpinBox, 'Spin_IntervalInput')
+        # QSpinBox for getting user input for the first game
+        self.Spin_FirstGame = self.findChild(QSpinBox, 'Spin_FirstGame')
+        # QSpinBox for getting user input for the rolling average
+        self.Spin_RollingAverage = self.findChild(QSpinBox, 'Spin_RollingAverage')
         
         #Update freshness and games list if the user toggles the "Include Private" button
         self.Check_IncludePrivate.stateChanged.connect(self.update_cumulative_benchmarks)
@@ -346,9 +350,9 @@ class Application(QMainWindow):
                 parts = selected_item.split()
                 weapon_name = ' '.join(parts[:-2])  # Join all parts except the last two
             else: weapon_name = "All Weapons"
-    
-            # Get the interval from the Spin_IntervalInput
-            interval = self.Spin_IntervalInput.value()
+            
+            # Fill preferences array
+            preferences_array = self.Spin_IntervalInput.value(), self.Spin_RollingAverage.value(), self.Spin_FirstGame.value()
     
             # Get freshness benchmarks from the update_cumulative_benchmarks function
             freshness_benchmarks = self.update_cumulative_benchmarks()
@@ -360,7 +364,7 @@ class Application(QMainWindow):
             printed_file = KKAD_Graph.graph_KKAD(
                 self.games_df,
                 freshness_benchmarks,
-                interval,
+                preferences_array,
                 weapon_name,
                 include_star_levels,
                 self.player_name
@@ -378,8 +382,8 @@ class Application(QMainWindow):
             weapon_name = ' '.join(parts[:-2])  # Join all parts except the last two
         else: weapon_name = "All Weapons"
 
-        # Get the interval from the Spin_IntervalInput
-        interval = self.Spin_IntervalInput.value()
+        # Fill preferences array
+        preferences_array = self.Spin_IntervalInput.value(), self.Spin_RollingAverage.value(), self.Spin_FirstGame.value()
 
         # Get freshness benchmarks from the update_cumulative_benchmarks function
         freshness_benchmarks = self.update_cumulative_benchmarks()
@@ -391,7 +395,7 @@ class Application(QMainWindow):
         printed_file = WL_Graph.graph_WL(
             self.games_df,
             freshness_benchmarks,
-            interval,
+            preferences_array,
             weapon_name,
             include_star_levels,
             self.player_name
@@ -433,6 +437,18 @@ class Application(QMainWindow):
         max_allowed_interval = max(1, int(len(self.data) * max_interval_percentage))
         self.Label_Interval.setText(f"Graph Interval (Max - {max_allowed_interval}):")
         self.Spin_IntervalInput.setMaximum(max_allowed_interval) # Update QLabel_Interval text based on the number of games for the selected weapon
+        
+        # Set the maximum value for the Spin_RollingAverage based on the filtered data
+        max_rolling_average_percentage = 0.75  # Maximum rolling average as a percentage of the number of games for the selected weapon
+        max_allowed_rolling_average = max(1, int(len(self.data) * max_rolling_average_percentage))
+        self.Label_RollingAverage.setText(f"Rolling Average (Max - {max_allowed_rolling_average}):")
+        self.Spin_RollingAverage.setMaximum(max_allowed_rolling_average)  # Update QLabel_RollingAverage text based on the number of games for the selected weapon
+        
+        # Set the maximum value for the Spin_FirstGame based on the filtered data
+        max_first_game_percentage = 0.75  # Maximum first game as a percentage of the number of games for the selected weapon
+        max_allowed_first_game = max(1, int(len(self.data) * max_first_game_percentage))
+        self.Label_FirstGame.setText(f"First Game (Max - {max_allowed_first_game}):")
+        self.Spin_FirstGame.setMaximum(max_allowed_first_game)  # Update QLabel_FirstGame text based on the number of games for the selected weapon
         
         games_list = self.build_game_dict()
         # Convert the list of dictionaries into a Pandas DataFrame
@@ -491,7 +507,6 @@ class Application(QMainWindow):
         print("\rProgram terminated.")
         self.close()
             
-    
 if __name__ == "__main__":
     app = QApplication([])
     window = Application()
