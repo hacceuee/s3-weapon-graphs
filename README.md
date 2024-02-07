@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project allows users to visualize and analyze weapon usage and performance statistics in the game Splatoon 3. The graphs provide insights into win rates, freshness levels, and other relevant metrics for different weapons.
+For use with stat.ink. This project allows users to visualize and analyze weapon usage and performance statistics in the game Splatoon 3. The graphs provide insights into win rates, freshness levels, and other relevant metrics for different weapons.
 
 ## Features
 
