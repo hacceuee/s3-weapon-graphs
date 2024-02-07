@@ -31,10 +31,7 @@ def save_image(num_games, starting_game, file_name, title, subheader):
     plt.legend(fontsize=9, handlelength=1)
     plt.xlim(max(0 - math.ceil(len(num_games) / 50) + 7, starting_game - math.ceil(starting_game/50)), math.ceil(len(num_games)+len(num_games)/50))
     
-    # Set y-axis ticks and add horizontal grid lines
-    y_ticks = plt.yticks()[0]
-    plt.yticks(y_ticks)
-    plt.grid(axis='y', linestyle='--', linewidth=0.5, color='lightgrey')
+    plt.grid(axis="y", linestyle='--', linewidth=0.5, color='lightgrey')
     
     # Create text elements with different font sizes
     title_text = plt.text(0.5, 1.05, title, fontsize=18, ha='center', va='bottom', transform=plt.gca().transAxes)

@@ -88,7 +88,6 @@ class Application(QMainWindow):
         self.Radio_5Star.toggled.connect(self.update_freshness)
         self.Radio_Other.toggled.connect(self.update_freshness)
 
-        
         # QSpinBox for getting user input for the interval
         self.Spin_IntervalInput = self.findChild(QSpinBox, 'Spin_IntervalInput')
         # QSpinBox for getting user input for the first game
@@ -98,6 +97,7 @@ class Application(QMainWindow):
         
         #Update freshness and games list if the user toggles the "Include Private" button
         self.Check_IncludePrivate.stateChanged.connect(self.update_cumulative_benchmarks)
+        self.Check_IncludePrivate.stateChanged.connect(self.update_data_for_selected_weapon)
         
         # Connect the clicked signal of graph buttons to custom methods
         self.Button_KAD_Graph.clicked.connect(self.display_KKAD_graph)
@@ -112,6 +112,7 @@ class Application(QMainWindow):
         self.actionOpen_file_location.triggered.connect(self.open_file_location)
         self.actionGitHub.triggered.connect(self.open_github)
         self.actionOpen_exports_folder.triggered.connect(self.open_image_location)
+        self.button_Default.clicked.connect(self.reset_defaults)
         
         # Initialize variables
         self.starting_freshness = 0  # Initial value
@@ -353,6 +354,9 @@ class Application(QMainWindow):
             
             # Fill preferences array
             preferences_array = self.Spin_IntervalInput.value(), self.Spin_RollingAverage.value(), self.Spin_FirstGame.value()
+            
+            # Line preferences array
+            line_pref = self.Check_KAD_K.isChecked(), self.Check_KAD_KA.isChecked(), self.Check_KAD_D.isChecked()
     
             # Get freshness benchmarks from the update_cumulative_benchmarks function
             freshness_benchmarks = self.update_cumulative_benchmarks()
@@ -365,6 +369,7 @@ class Application(QMainWindow):
                 self.games_df,
                 freshness_benchmarks,
                 preferences_array,
+                line_pref,
                 weapon_name,
                 include_star_levels,
                 self.player_name
@@ -384,6 +389,9 @@ class Application(QMainWindow):
 
         # Fill preferences array
         preferences_array = self.Spin_IntervalInput.value(), self.Spin_RollingAverage.value(), self.Spin_FirstGame.value()
+        
+        # Get trendline preference
+        trendline_pref = self.Check_WL_Trendline.isChecked()
 
         # Get freshness benchmarks from the update_cumulative_benchmarks function
         freshness_benchmarks = self.update_cumulative_benchmarks()
@@ -396,6 +404,7 @@ class Application(QMainWindow):
             self.games_df,
             freshness_benchmarks,
             preferences_array,
+            trendline_pref, 
             weapon_name,
             include_star_levels,
             self.player_name
@@ -440,7 +449,7 @@ class Application(QMainWindow):
         
         # Set the maximum value for the Spin_RollingAverage based on the filtered data
         max_rolling_average_percentage = 0.75  # Maximum rolling average as a percentage of the number of games for the selected weapon
-        max_allowed_rolling_average = max(1, int(len(self.data) * max_rolling_average_percentage))
+        max_allowed_rolling_average = max(100, int(len(self.data) * max_rolling_average_percentage))
         self.Label_RollingAverage.setText(f"Rolling Average (Max - {max_allowed_rolling_average}):")
         self.Spin_RollingAverage.setMaximum(max_allowed_rolling_average)  # Update QLabel_RollingAverage text based on the number of games for the selected weapon
         
@@ -494,6 +503,7 @@ class Application(QMainWindow):
             QMessageBox.critical(self, "Error", f"Error opening GitHub link: {str(e)}")
 
     def open_image_location(self):
+        
             try:
                 # Specify the path to the image location folder
                 image_folder_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Image Exports")
@@ -506,6 +516,11 @@ class Application(QMainWindow):
     def exit_program(self):
         print("\rProgram terminated.")
         self.close()
+        
+    def reset_defaults(self):
+        self.Spin_IntervalInput.setValue(1)
+        self.Spin_RollingAverage.setValue(100)
+        self.Spin_FirstGame.setValue(1)
             
 if __name__ == "__main__":
     app = QApplication([])

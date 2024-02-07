@@ -427,9 +427,9 @@
            </layout>
           </item>
           <item>
-           <widget class="QPushButton" name="pushButton">
+           <widget class="QPushButton" name="button_Default">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="text">
              <string>Reset to Default</string>
@@ -766,7 +766,7 @@
               <item>
                <widget class="QCheckBox" name="Check_WL_Trendline">
                 <property name="enabled">
-                 <bool>false</bool>
+                 <bool>true</bool>
                 </property>
                 <property name="text">
                  <string>Include trendline</string>
@@ -797,9 +797,9 @@
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout">
                 <item>
-                 <widget class="QCheckBox" name="Check_WL_Trendline_2">
+                 <widget class="QCheckBox" name="Check_KAD_K">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Kills</string>
@@ -810,9 +810,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="Check_WL_Trendline_3">
+                 <widget class="QCheckBox" name="Check_KAD_KA">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Kills &amp;&amp; Assists</string>
@@ -823,9 +823,9 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="Check_WL_Trendline_4">
+                 <widget class="QCheckBox" name="Check_KAD_D">
                   <property name="enabled">
-                   <bool>false</bool>
+                   <bool>true</bool>
                   </property>
                   <property name="text">
                    <string>Death</string>

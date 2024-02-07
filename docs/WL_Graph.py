@@ -12,7 +12,7 @@ import math
 import Image_Saver
 import Functions
 
-def graph_WL(games_df, freshness_benchmarks, preferences_array, weapon_name, include_star_levels, player_name):
+def graph_WL(games_df, freshness_benchmarks, preferences_array, trendline_pref, weapon_name, include_star_levels, player_name):
     
     # Calculate the rolling sum of wins and total games
     window_size = preferences_array[1]
@@ -35,12 +35,13 @@ def graph_WL(games_df, freshness_benchmarks, preferences_array, weapon_name, inc
     # Plotting the rolling win percentage
     plt.plot(displayed_num_games[::interval], games_df['rolling_win_percentage'].iloc[starting_game-1::interval], label=f'Rolling Win Percentage (n = {window_size})', color='green')
     
-    # Calculate the trendline for the entire data
-    coefficients = np.polyfit(total_num_games, games_df['rolling_win_percentage'], 1)
-    trendline = np.polyval(coefficients, total_num_games)
-    
-    # Plot the trendline, starting from the specified game
-    plt.plot(total_num_games[starting_game-1:], trendline[starting_game-1:], label='Trendline', linestyle='--', color='#8cc2b3')
+    if trendline_pref: 
+        # Calculate the trendline for the entire data
+        coefficients = np.polyfit(total_num_games, games_df['rolling_win_percentage'], 1)
+        trendline = np.polyval(coefficients, total_num_games)
+        
+        # Plot the trendline, starting from the specified game
+        plt.plot(total_num_games[starting_game-1:], trendline[starting_game-1:], label='Trendline', linestyle='--', color='#8cc2b3')
     
     # Add Freshness lines 
     if include_star_levels: 

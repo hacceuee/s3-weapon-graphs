@@ -11,7 +11,7 @@ import Image_Saver
 import math
 import Functions
 
-def graph_KKAD(games_df, freshness_benchmarks, preferences_array, weapon_name, include_star_levels, player_name):
+def graph_KKAD(games_df, freshness_benchmarks, preferences_array, line_pref, weapon_name, include_star_levels, player_name):
 
     # Calculate the rolling average
     window_size = preferences_array[1]
@@ -28,9 +28,12 @@ def graph_KKAD(games_df, freshness_benchmarks, preferences_array, weapon_name, i
     interval = preferences_array[0]
     
     # Plotting the lines, starting from the specified game
-    plt.plot(displayed_num_games[::interval], rolling_df['kill_permin'].iloc[starting_game-1::interval], label='Kill per minute', color='blue')
-    plt.plot(displayed_num_games[::interval], rolling_df['killassist_permin'].iloc[starting_game-1::interval], label='Kill/Assist per minute', color='blue', linestyle='dashed', linewidth=0.8)
-    plt.plot(displayed_num_games[::interval], rolling_df['death_permin'].iloc[starting_game-1::interval], label='Death per minute', color='orange')
+    if line_pref[0]:
+        plt.plot(displayed_num_games[::interval], rolling_df['kill_permin'].iloc[starting_game-1::interval], label='Kill per minute', color='blue')
+    if line_pref[1]:
+        plt.plot(displayed_num_games[::interval], rolling_df['killassist_permin'].iloc[starting_game-1::interval], label='Kill/Assist per minute', color='blue', linestyle='dashed', linewidth=0.8)
+    if line_pref[2]:
+        plt.plot(displayed_num_games[::interval], rolling_df['death_permin'].iloc[starting_game-1::interval], label='Death per minute', color='orange')
     
     # Add Freshness lines 
     if include_star_levels: 

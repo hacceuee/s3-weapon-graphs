@@ -42,14 +42,16 @@ def graph_freshness(freshness_benchmarks, starting_game):
     for index in range(5):
         benchmark = freshness_benchmarks[index]
         if benchmark > starting_game:  # Check if the benchmark is greater than the starting game
-            plt.axvline(benchmark, color='red', linestyle='dotted', linewidth=0.7)
+            plt.axvline(x = benchmark, color='red', linestyle='dotted', linewidth=0.7)
             stars = '★' * (index + 1)
             
             # Calculate the position to move up by 1% of the graph height
             y_position = plt.yticks()[0][0] + 0.01 * (plt.ylim()[1] - plt.ylim()[0])
             
             # Add vertical text label directly on the line, rotated vertically
-            plt.text(benchmark, y_position, f'{stars}', rotation='vertical', va='bottom', ha='right', color='red', fontsize=8)
+            #plt.annotate(benchmark, y_position, f'{stars}', rotation='vertical', va='bottom', ha='right', color='red', fontsize=8)
+            # Add vertical text label directly on the line, rotated vertically
+            plt.annotate(f'{stars}', (benchmark, y_position), rotation='vertical', va='bottom', ha='right', color='red', fontsize=8)
         
 def count_weapons(data):
     weapon_counts = {}
