@@ -14,6 +14,9 @@ import Functions
 
 def graph_WL(games_df, freshness_benchmarks, preferences_array, trendline_pref, weapon_name, include_star_levels, player_name):
     
+    # Clear the existing graph
+    plt.clf()
+    
     # Calculate the rolling sum of wins and total games
     window_size = preferences_array[1]
     games_df['rolling_wins'] = games_df['win_state'].eq('win').rolling(window=window_size, min_periods=math.floor(window_size/10)).sum()

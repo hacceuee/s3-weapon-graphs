@@ -13,6 +13,9 @@ import Functions
 
 def graph_KKAD(games_df, freshness_benchmarks, preferences_array, line_pref, weapon_name, include_star_levels, player_name):
 
+    # Clear the existing graph
+    plt.clf()
+    
     # Calculate the rolling average
     window_size = preferences_array[1]
     rolling_df = games_df[['kill_permin', 'killassist_permin', 'death_permin']].rolling(window=window_size, min_periods=math.floor(window_size/10)).mean()

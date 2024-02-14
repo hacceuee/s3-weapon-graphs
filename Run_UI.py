@@ -41,7 +41,7 @@ from PyQt5.QtCore import Qt, QUrl
 from PyQt5 import uic
 from PyQt5.QtGui import QDesktopServices
 
-import threading
+import time
 
 import Functions
 import JSON_Muncher
@@ -49,12 +49,15 @@ import KKAD_Graph
 import WL_Graph
 import Image_Saver
 
-# Initialize variables outside the loop
+# Initialize variables
 Image_Saver.initialize_plot()
 
 class Application(QMainWindow):
     def __init__(self):
         super(Application, self).__init__()
+        
+        # Get the font used by the application
+        font = app.font()
         
         # Load the UI file 
         ui_file_path = os.path.join(docs_path, "Main_UI.ui")
@@ -123,7 +126,7 @@ class Application(QMainWindow):
         # Load database
         file_path = JSON_Muncher.check_for_file()
         self.ProgressBar_Loading.setRange(0, 0)
-        self.start_loading_thread(file_path) # Start the loading thread
+        self.start_loading(file_path) # Start the loading thread
         
         # Show the app
         self.show()
@@ -131,15 +134,25 @@ class Application(QMainWindow):
         # Print message to the terminal indicating that the program has started
         print("\rProgram running.")
     
-    def start_loading_thread(self, file_path):
-        # Show the progress bar when loading starts
+    def start_loading(self, file_path):
+        # Show the progress bar
         self.ProgressBar_Loading.show()
-    
-        # Start a new thread for loading the file
-        loading_thread = threading.Thread(target=self.load_file, args=(file_path,))
-        loading_thread.start()
         
-    def load_file (self, file_path):
+        # Fake loading process
+        for i in range(101):  # Iterate from 0 to 100 (inclusive)
+            # Update progress bar value
+            self.ProgressBar_Loading.setValue(i)
+            
+            # Sleep for a short duration to simulate processing time
+            time.sleep(0.01)  # Adjust duration as needed
+            
+        # Once the progress bar reaches 100%, hide it
+        self.ProgressBar_Loading.hide()
+        
+        # After hiding the progress bar, perform the actual file loading
+        self.load_file(file_path)
+    
+    def load_file(self, file_path):
         try: 
             if file_path is not None:
                 with open(file_path, encoding="utf8") as file:
@@ -172,18 +185,12 @@ class Application(QMainWindow):
             # If there's an error loading the file during startup, set the initial message
             self.Label_User_Updates.setText("Import a .JSON file by navigating to 'JSON Import -> Import new file.' \nEnsure that the file has been downloaded and unzipped from the Export feature on your profile at stat.ink.")
             self.Label_User_Updates.setStyleSheet("color: rgba(135, 32, 28, 255); font-weight: bold;")
-        
-        # Reset the progress bar value after loading is done
-        self.ProgressBar_Loading.setValue(0)
-        
-        # Hide the progress bar when loading is done
-        self.ProgressBar_Loading.hide()
     
     def reload_file (self):
         # Load database
         file_path = JSON_Muncher.check_for_file()
         self.ProgressBar_Loading.setRange(0, 0)
-        self.start_loading_thread(file_path) # Start the loading thread
+        self.start_loading(file_path) # Start the loading thread
         
         self.Label_User_Updates.setText(f"{file_path} has been reloaded.")
         self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
@@ -379,6 +386,7 @@ class Application(QMainWindow):
             self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
 
     def display_WL_graph(self):
+
         # Get the selected item text from the DropDown_WeaponSelect
         selected_item = self.DropDown_WeaponSelect.currentText()
         
@@ -483,7 +491,7 @@ class Application(QMainWindow):
             new_path = JSON_Muncher.import_new_file(file_path)
             # Set the progress bar to indeterminate mode while loading
             self.ProgressBar_Loading.setRange(0, 0)
-            self.start_loading_thread(new_path) # Start the loading thread
+            self.start_loading(new_path) # Start the loading thread
             self.Label_User_Updates.setText(f"{file_path} has successfully been parsed and copied to {new_path}")
             self.Label_User_Updates.setStyleSheet("color: rgba(0, 0, 0, 128);") 
     
