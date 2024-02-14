@@ -42,7 +42,7 @@ If not installed, the program will prompt you to install them. You can also inst
 6. **Run the Program:**
    - Open the terminal or command prompt.
    - Navigate to the directory where you have the program files.
-   - Run the program (`Run_UI.py`). On Windows, type into your command prompt `python run_ui.py`	
+   - Run the program (`Run_UI.py`). On Windows, type into your command prompt `python run_ui.py`
 
 7. **Provide the JSON File Path:**
    - If prompted, import your .JSON file via JSON Import -> Import new file in the top menu. 
