@@ -41,10 +41,6 @@ def change_matplotlib_font():
     font_name = fm.FontProperties(fname=font_file).get_name()
     plt.rcParams['font.family'] = font_name
     print("Font family: ", plt.rcParams['font.family'])
-
-def clear_font_cache():
-    cache_dir = fm.get_cachedir()
-    shutil.rmtree(cache_dir, ignore_errors=True)
     
 def save_image(num_games, starting_game, file_name, title, subheader):
 

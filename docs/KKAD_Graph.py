@@ -60,6 +60,4 @@ def graph_KKAD(games_df, freshness_benchmarks, preferences_array, line_pref, wea
     file_name = f"{weapon_name}-KD_Over_Time.png"
     Image_Saver.save_image(true_game_number, starting_game, file_name, title, subheader)
     
-    Image_Saver.clear_font_cache()
-    
     return file_name
