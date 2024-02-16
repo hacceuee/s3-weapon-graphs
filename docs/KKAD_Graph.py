@@ -16,6 +16,8 @@ def graph_KKAD(games_df, freshness_benchmarks, preferences_array, line_pref, wea
     # Clear the existing graph
     plt.clf()
     
+    Image_Saver.change_matplotlib_font()
+    
     # Calculate the rolling average
     window_size = preferences_array[1]
     rolling_df = games_df[['kill_permin', 'killassist_permin', 'death_permin']].rolling(window=window_size, min_periods=math.floor(window_size/10)).mean()
@@ -57,5 +59,7 @@ def graph_KKAD(games_df, freshness_benchmarks, preferences_array, line_pref, wea
     
     file_name = f"{weapon_name}-KD_Over_Time.png"
     Image_Saver.save_image(true_game_number, starting_game, file_name, title, subheader)
+    
+    Image_Saver.clear_font_cache()
     
     return file_name

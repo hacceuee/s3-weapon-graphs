@@ -8,6 +8,9 @@ Created on Sat Jan 20 01:52:23 2024
 import os
 import math
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm
+import shutil
+
     
 def initialize_plot():
     
@@ -16,7 +19,7 @@ def initialize_plot():
     plt.rcParams["figure.figsize"]=[16,9]
     plt.rcParams["figure.dpi"]=72 
     plt.rcParams["figure.subplot.top"] = 0.85 # Set the default subplot top parameter to hopefully avoid cropping
-
+    
     # Create a dummy plot and save it
     plt.plot([0, 1], [0, 1])
     plt.title("Temp Plot")
@@ -24,6 +27,24 @@ def initialize_plot():
     plt.ylabel("Y-axis")
     plt.savefig("temp_plot.png")
     plt.close()
+    
+def change_matplotlib_font():
+    # Get the directory path where the Python file is located
+    current_directory = os.path.dirname(os.path.abspath(__file__))
+    
+    # Construct the full path to the font file
+    font_file = os.path.join(current_directory, 'FOT-RodinNTLG Pro DB.otf')
+    
+    # Add font to font manager
+    fm.fontManager.addfont(font_file)
+
+    font_name = fm.FontProperties(fname=font_file).get_name()
+    plt.rcParams['font.family'] = font_name
+    print("Font family: ", plt.rcParams['font.family'])
+
+def clear_font_cache():
+    cache_dir = fm.get_cachedir()
+    shutil.rmtree(cache_dir, ignore_errors=True)
     
 def save_image(num_games, starting_game, file_name, title, subheader):
 
