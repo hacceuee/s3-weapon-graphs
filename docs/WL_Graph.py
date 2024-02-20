@@ -52,7 +52,7 @@ def graph_WL(games_df, freshness_benchmarks, preferences_array, trendline_pref, 
     
     #------------------GRAPH STUFF
     # Prepare subheader with weapon info, number of games, and interval
-    subheader = f"{weapon_name} | Number of Games Shown: {len(displayed_num_games)+1}/{len(total_num_games)+1} | Interval: {interval} | Player: {player_name}"
+    subheader = f"{weapon_name} ┃┃ Number of Games Shown: {len(displayed_num_games)+1}/{len(total_num_games)+1} ┃┃ Interval: {interval} ┃┃ Rolling Window Size: {window_size} ┃┃ Player: {player_name}"
     
     # Set up the title with subheader
     title = "Win Stats Over Time"

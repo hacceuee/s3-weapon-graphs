@@ -46,7 +46,7 @@ def graph_KKAD(games_df, freshness_benchmarks, preferences_array, line_pref, wea
         
     #------------------GRAPH STUFF
     # Prepare subheader with weapon info, number of games, and interval
-    subheader = f"{weapon_name} | Number of Games Shown: {len(displayed_num_games)+1}/{len(total_num_games)+1} | Interval: {interval} | Rolling Window Size: {window_size} | Player: {player_name}"
+    subheader = f"{weapon_name} -- Number of Games Shown: {len(displayed_num_games)+1}/{len(total_num_games)+1} -- Interval: {interval} -- Rolling Window Size: {window_size} -- Player: {player_name}"
     
     # Set up the title with subheader
     title = "Splat Stats Over Time"
